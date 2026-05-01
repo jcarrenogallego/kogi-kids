@@ -257,18 +257,19 @@
 - Versioning: use workflow versioning for deployments, old versions finish on old code
 
 ### video-generator-orchestrator
-- Orchestrate 6 sequential agents: Character → Dialogue → Scenography → Cinematography → Scriptwriter → Prompt Engineer
-- STOP after each agent, show results, WAIT for explicit approval ("apruebo", "sí", "continúa") before proceeding
-- Save each phase to Engram: `topic_key = "video-gen/{story-slug}/phase-{N}"`, `type = "decision"`
-- If user gives feedback → re-run current agent with constraints, don't proceed to next
-- Character Agent: JSON array of characters with physical traits + MidJourney consistency tags (use character-design-sheet skill)
-- Dialogue Agent: JSON array of scenes with dialogue, duration, age-appropriate vocabulary (use kids-book-writer skill for word limits)
-- Scenography Agent: JSON array of scene descriptions with location, mood, color palette, props (use storytelling skill)
-- Cinematography Agent: JSON array of shots with type, angle, movement, duration (shorter for younger ages)
+- Orchestrate 7 sequential phases: Style Selection → Character → Dialogue → Scenography → Cinematography → Scriptwriter → Prompt Engineer
+- Phase 0 (Style Selection): Present 6 visual style options (Disney 3D, Pixar, Ghibli/Anime, 2D Traditional, Stop Motion, Book Illustration), wait for user choice
+- STOP after each phase, show results, WAIT for explicit approval ("apruebo", "sí", "continúa") before proceeding
+- Dual persistence: Save to Engram (`topic_key = "video-gen/{story-slug}/phase-{N}"`) AND file (`specs/workflows/{story-slug}/{NN}-{phase}.md`)
+- Pass selected style context to ALL subsequent agents (Phase 1-6) as art direction constraint
+- Character Agent: JSON array of characters matching selected style (use character-design-sheet skill)
+- Dialogue Agent: JSON array of scenes with age-appropriate vocabulary (use kids-book-writer skill)
+- Scenography Agent: JSON array of scene descriptions matching selected style (use storytelling skill)
+- Cinematography Agent: JSON array of shots adapted to selected animation style
 - Scriptwriter Agent: Unified text script synchronizing all elements (use mockumentary-screenplay for structure)
-- Prompt Engineer Agent: MidJourney V7 prompts per shot with `--ar 16:9`, style consistency, character tags (use midjourney-prompt-engineering skill)
-- Recovery: Search Engram `"video-gen/{story-slug}"`, find latest phase, offer to resume
-- Final output: Markdown document with all prompts + character consistency tags + Engram archive references
+- Prompt Engineer Agent: MidJourney V7 prompts with `--ar 16:9`, selected style tags, character consistency tags (use midjourney-prompt-engineering skill)
+- Recovery: Search Engram `"video-gen/{story-slug}"` OR read `specs/workflows/{story-slug}/*.md`, find latest phase, offer to resume
+- Final output: Markdown document with all prompts + character consistency tags + style notes + archive references
 
 ---
 

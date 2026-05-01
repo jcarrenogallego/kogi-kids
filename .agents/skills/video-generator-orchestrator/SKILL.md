@@ -5,18 +5,22 @@ description: Orchestrate 6 specialized agents to transform children's stories in
 
 # Video Generator Orchestrator
 
-Transform children's stories (ages 2-10) into structured MidJourney video prompts through a 6-phase agent workflow with human validation at each step.
+Transform children's stories (ages 2-10) into structured MidJourney video prompts through a 7-phase agent workflow with human validation at each step.
 
 ## Workflow Overview
 
 ```
-Story Input → Character Agent → [Human Review] → Dialogue Agent → [Human Review] →
-Scenography Agent → [Human Review] → Cinematography Agent → [Human Review] →
-Scriptwriter Agent → [Human Review] → Prompt Engineer Agent → [Human Review] →
-MidJourney Prompts (Final Output)
+Story Input → Style Selection → [Human Review] → Character Agent → [Human Review] →
+Dialogue Agent → [Human Review] → Scenography Agent → [Human Review] →
+Cinematography Agent → [Human Review] → Scriptwriter Agent → [Human Review] →
+Prompt Engineer Agent → [Human Review] → MidJourney Prompts (Final Output)
 ```
 
-**Core Principle**: STOP after each agent and WAIT for explicit human approval before proceeding to next phase.
+**Core Principle**: STOP after each phase and WAIT for explicit human approval before proceeding to next phase.
+
+**Dual Persistence**: All phases saved to both:
+- **Engram**: Topic keys `video-gen/{story-slug}/phase-{N}` for session recovery
+- **Files**: `specs/workflows/{story-slug}/{NN}-{phase-name}.md` for Git versioning
 
 ## Orchestrator Instructions
 
@@ -29,12 +33,15 @@ When user provides a story:
    - Has narrative structure (characters, setting, conflict/resolution)
    - Appropriate content for children (no violence, mature themes)
    
-2. **Create Engram topic key**: `video-gen/{story-slug}/{timestamp}`
+2. **Create identifiers**:
+   - Engram topic key: `video-gen/{story-slug}/{timestamp}`
+   - File path: `specs/workflows/{story-slug}/`
 
-3. **Show workflow preview**:
+3. **Show workflow preview with style selection**:
    ```
-   Voy a procesar tu historia en 6 fases:
+   Voy a procesar tu historia en 7 fases:
    
+   0. Style Selection → Elegís el estilo visual general
    1. Character Agent → Descripciones de personajes
    2. Dialogue Agent → Diálogos apropiados para edad
    3. Scenography Agent → Escenografías y locaciones
@@ -43,17 +50,32 @@ When user provides a story:
    6. Prompt Engineer Agent → Prompts MidJourney listos
    
    Después de cada fase te pido aprobación antes de continuar.
-   ¿Arrancamos con Character Agent?
+   
+   Arrancamos con Style Selection: ¿Qué estilo visual preferís para este video?
+   
+   **Opciones**:
+   1. **Disney 3D** — Render realista, personajes expresivos, iluminación cálida (ej: Frozen, Moana)
+   2. **Pixar 3D Animation** — Stylized, colores vibrantes, texturas suaves (ej: Coco, Inside Out)
+   3. **Studio Ghibli / Anime** — Dibujo a mano, detalles delicados, fondos pintados (ej: Totoro, Spirited Away)
+   4. **2D Traditional Animation** — Disney clásico, líneas limpias, cel shading (ej: Lion King, Aladdin)
+   5. **Stop Motion / Clay Animation** — Texturas táctiles, look artesanal (ej: Coraline, Kubo)
+   6. **Children's Book Illustration** — Acuarela o gouache, estilo pictórico (ej: The Gruffalo)
+   7. **Otro** — Describí el estilo que tenés en mente
+   
+   Elegí un número (1-7) o describí tu estilo preferido.
    ```
+
+4. **Wait for style selection** — do NOT proceed until user selects style
 
 ### Phase Execution Pattern
 
-For EACH of the 6 phases:
+For EACH of the 7 phases (0-6):
 
-1. **Launch sub-agent** with:
+1. **Launch sub-agent** (or present options for Phase 0) with:
    - Phase-specific instructions (see Agent Definitions below)
    - Relevant skills injected (compact rules from registry)
    - Previous phase outputs as context
+   - **Selected style** (from Phase 0) as context for all subsequent phases
    - Story input
 
 2. **Present results**:
@@ -67,7 +89,9 @@ For EACH of the 6 phases:
    - Feedback específico → re-ejecuto este agente con tus ajustes
    ```
 
-3. **Save to Engram** (after approval):
+3. **Save to dual persistence** (after approval):
+   
+   **A) Engram** (session recovery):
    ```python
    mcp_engram_mem_save(
        title=f"video-gen/{story-slug}/phase-{N}-{agent-name}",
@@ -84,6 +108,40 @@ For EACH of the 6 phases:
        """
    )
    ```
+   
+   **B) File system** (Git versioning):
+   ```python
+   create_file(
+       filePath=f"specs/workflows/{story-slug}/{N:02d}-{phase-name}.md",
+       content=f"""
+       # Fase {N}: {Agent Name} — {Story Title}
+       
+       **Workflow**: video-generator-orchestrator
+       **Story**: {story_title}
+       **Target Age**: {age_range}
+       **Date**: {current_date}
+       **Status**: ✅ Approved
+       
+       ---
+       
+       {agent_output_formatted_as_markdown}
+       
+       ---
+       
+       ## User Feedback
+       
+       **User Response**: "{user_response}"
+       **Changes Requested**: {changes_if_any}
+       **Date Approved**: {current_date}
+       
+       ---
+       
+       ## Next Phase
+       
+       ✅ {Phase Name} approved → Proceed to **Phase {N+1}: {Next Agent Name}**
+       """
+   )
+   ```
 
 4. **Wait for approval** — do NOT proceed to next phase until user explicitly approves
 
@@ -96,6 +154,86 @@ If conversation is compacted or user returns later:
 3. Offer to resume: "Veo que llegamos hasta {phase N}. ¿Continuamos con {phase N+1}?"
 
 ## Agent Definitions
+
+### 0. Style Selection (No sub-agent needed)
+
+**Goal**: Define visual style direction for entire video before generating any content
+
+**Orchestrator Action**: Present style options directly to user (no sub-agent launch needed)
+
+**Options to Present**:
+
+1. **Disney 3D** 
+   - Realistic render, expressive characters, warm lighting
+   - Examples: Frozen, Moana, Encanto
+   - MidJourney style tags: `disney 3d render, pixar quality, warm lighting, detailed textures`
+   - Best for: Stories with emotional depth, magical realism
+
+2. **Pixar 3D Animation** 
+   - Stylized, vibrant colors, soft textures, exaggerated proportions
+   - Examples: Coco, Inside Out, Toy Story
+   - MidJourney style tags: `pixar animation style, vibrant colors, soft lighting, stylized characters`
+   - Best for: Whimsical stories, character-driven narratives
+
+3. **Studio Ghibli / Anime** 
+   - Hand-drawn look, delicate details, painted backgrounds, watercolor feel
+   - Examples: My Neighbor Totoro, Spirited Away, Ponyo
+   - MidJourney style tags: `studio ghibli style, hand drawn animation, watercolor backgrounds, anime`
+   - Best for: Nature-focused stories, gentle pacing, emotional journeys
+
+4. **2D Traditional Animation** 
+   - Disney classic, clean lines, cel shading, bold colors
+   - Examples: The Lion King, Aladdin, Mulan
+   - MidJourney style tags: `traditional 2d animation, disney classic style, cel shading, clean lines`
+   - Best for: Epic adventures, classic storytelling
+
+5. **Stop Motion / Clay Animation** 
+   - Tactile textures, handcrafted look, imperfect charm
+   - Examples: Coraline, Kubo and the Two Strings, Wallace & Gromit
+   - MidJourney style tags: `stop motion animation, clay animation, textured surfaces, handcrafted look`
+   - Best for: Quirky stories, tactile worlds, unique aesthetics
+
+6. **Children's Book Illustration** 
+   - Watercolor or gouache, painterly, soft edges, storybook feel
+   - Examples: The Gruffalo, Where the Wild Things Are, The Very Hungry Caterpillar
+   - MidJourney style tags: `children's book illustration, watercolor painting, gouache, soft edges, storybook art`
+   - Best for: Gentle stories, bedtime tales, educational content
+
+7. **Other / Custom**
+   - User describes their preferred style
+   - Orchestrator translates to MidJourney style tags
+
+**User Selection Process**:
+```
+¿Qué estilo visual preferís para este video?
+
+1. Disney 3D (Frozen, Moana)
+2. Pixar 3D (Coco, Inside Out)
+3. Studio Ghibli / Anime (Totoro, Spirited Away)
+4. 2D Traditional Animation (Lion King, Aladdin)
+5. Stop Motion / Clay (Coraline, Kubo)
+6. Children's Book Illustration (The Gruffalo)
+7. Otro (describí tu estilo)
+
+Elegí un número (1-7) o describí el estilo.
+```
+
+**Output Format**:
+```json
+{
+  "style_choice": "Pixar 3D Animation",
+  "midjourney_style_tags": "pixar animation style, vibrant colors, soft lighting, stylized characters",
+  "art_direction_notes": "Focus on exaggerated expressions, round shapes, warm color palette. Characters should have large expressive eyes and simplified but appealing designs.",
+  "reference_films": ["Coco", "Inside Out", "Toy Story"],
+  "color_palette_guidance": "Vibrant but not oversaturated, warm tones preferred, magical lighting"
+}
+```
+
+**Save to File**: `specs/workflows/{story-slug}/00-style-selection.md`
+
+**Pass to All Subsequent Agents**: Style selection context MUST be included in prompts for Character, Scenography, Cinematography, and Prompt Engineer agents.
+
+---
 
 ### 1. Character Agent
 
@@ -457,18 +595,20 @@ Save final deliverable to Engram as `video-gen/{story-slug}/final-output`.
 ```
 # video-generator-orchestrator compact rules
 
-1. Orchestrate 6 sequential agents: Character → Dialogue → Scenography → Cinematography → Scriptwriter → Prompt Engineer
-2. STOP after each agent, show results, WAIT for explicit approval ("apruebo", "sí", "continúa") before proceeding
-3. Save each phase to Engram: topic_key = "video-gen/{story-slug}/phase-{N}", type = "decision"
-4. If user gives feedback → re-run current agent with constraints, don't proceed to next
-5. Character Agent: JSON array of characters with physical traits + MidJourney consistency tags (use character-design-sheet skill)
-6. Dialogue Agent: JSON array of scenes with dialogue, duration, age-appropriate vocabulary (use kids-book-writer skill for word limits)
-7. Scenography Agent: JSON array of scene descriptions with location, mood, color palette, props (use storytelling skill)
-8. Cinematography Agent: JSON array of shots with type, angle, movement, duration (shorter for younger ages)
-9. Scriptwriter Agent: Unified text script synchronizing all elements (use mockumentary-screenplay for structure)
-10. Prompt Engineer Agent: MidJourney V7 prompts per shot with --ar 16:9, style consistency, character tags (use midjourney-prompt-engineering skill)
-11. Recovery: Search Engram "video-gen/{story-slug}", find latest phase, offer to resume
-12. Final output: Markdown document with all prompts + character consistency tags + Engram archive references
+1. Orchestrate 7 sequential phases: Style Selection → Character → Dialogue → Scenography → Cinematography → Scriptwriter → Prompt Engineer
+2. Phase 0 (Style Selection): Present 6 visual style options (Disney 3D, Pixar, Ghibli/Anime, 2D Traditional, Stop Motion, Book Illustration), wait for user choice
+3. STOP after each phase, show results, WAIT for explicit approval ("apruebo", "sí", "continúa") before proceeding
+4. Dual persistence: Save to Engram (topic_key = "video-gen/{story-slug}/phase-{N}") AND file (specs/workflows/{story-slug}/{NN}-{phase}.md)
+5. Pass selected style context to ALL subsequent agents (Phase 1-6) as art direction constraint
+6. If user gives feedback → re-run current agent with constraints, don't proceed to next
+7. Character Agent: JSON array of characters with physical traits + MidJourney consistency tags matching selected style (use character-design-sheet skill)
+8. Dialogue Agent: JSON array of scenes with dialogue, duration, age-appropriate vocabulary (use kids-book-writer skill for word limits)
+9. Scenography Agent: JSON array of scene descriptions with location, mood, color palette, props matching selected style (use storytelling skill)
+10. Cinematography Agent: JSON array of shots with type, angle, movement, duration adapted to selected animation style
+11. Scriptwriter Agent: Unified text script synchronizing all elements (use mockumentary-screenplay for structure)
+12. Prompt Engineer Agent: MidJourney V7 prompts per shot with --ar 16:9, selected style tags, character consistency tags (use midjourney-prompt-engineering skill)
+13. Recovery: Search Engram "video-gen/{story-slug}" OR read specs/workflows/{story-slug}/*.md, find latest phase, offer to resume
+14. Final output: Markdown document with all prompts + character consistency tags + style notes + Engram/file archive references
 ```
 
 ## Trigger Phrases
