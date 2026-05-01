@@ -12,6 +12,39 @@ Generate detailed shot lists with framing, angles, movements, and duration for e
 - **scenography** (array, required): Environment descriptions from Phase 3
 - **target_age** (enum, required): Target age range from ["2-3", "4-5", "6-7", "8-9"]
 - **selected_style** (string, required): Visual style from Phase 0 (affects camera style choices)
+- **output_path** (string, required): Absolute file path where output should be written (e.g., `stories/{story-slug}/cinematography/cinematography.md`)
+
+## File Output Instructions
+
+After generating the shot list, you MUST write TWO files: English (technical) + Spanish (user-readable).
+
+### Steps
+
+1. **Receive output_path parameter** from orchestrator
+
+2. **Write ENGLISH version** (technical reference):
+   - Path: `output_path` parameter
+   - Content: Full JSON array with all shots in English
+   - Encoding: UTF-8
+
+3. **Write SPANISH version** (user-readable):
+   - Path: Replace `.md` with `-es.md` in output_path (e.g., `cinematography-es.md`)
+   - Content: Same JSON structure with shot descriptions translated to Spanish
+   - Translate: shot types, camera angles, action descriptions, composition notes
+   - Keep: Technical terms if needed (e.g., "close-up" → "plano cercano / close-up")
+
+4. **Dual-language strategy**: Write both files AND display Spanish in chat
+
+5. **Error handling**: File write failure is NON-BLOCKING for both files
+
+6. **Success confirmation**:
+   ```
+   ✅ Shot list written to:
+   - English: {output_path}
+   - Spanish: {output_path_es}
+   
+   [Display Spanish version shot breakdown here]
+   ```
 
 ## Output Format
 

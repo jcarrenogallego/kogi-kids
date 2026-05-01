@@ -13,6 +13,39 @@ Assemble complete script combining all previous phase outputs (Characters, Dialo
 - **scenography** (array, required): Environment descriptions from Phase 3
 - **shots** (array, required): Camera shot list from Phase 4
 - **selected_style** (string, required): Visual style from Phase 0
+- **output_path** (string, required): Absolute file path where output should be written (e.g., `stories/{story-slug}/scripts/script.md`)
+
+## File Output Instructions
+
+After assembling the complete script, you MUST write TWO files: English (technical) + Spanish (user-readable).
+
+### Steps
+
+1. **Receive output_path parameter** from orchestrator
+
+2. **Write ENGLISH version** (technical reference):
+   - Path: `output_path` parameter
+   - Content: Full unified script in Fountain-like format in English
+   - Encoding: UTF-8
+
+3. **Write SPANISH version** (user-readable):
+   - Path: Replace `.md` with `-es.md` in output_path (e.g., `script-es.md`)
+   - Content: Same script structure with all content translated to Spanish
+   - Translate: dialogue, action descriptions, scene headings, narration
+   - Keep: Shot numbers, technical formatting (Fountain structure)
+
+4. **Dual-language strategy**: Write both files AND display Spanish in chat
+
+5. **Error handling**: File write failure is NON-BLOCKING for both files
+
+6. **Success confirmation**:
+   ```
+   ✅ Complete script written to:
+   - English: {output_path}
+   - Spanish: {output_path_es}
+   
+   [Display Spanish version script preview here]
+   ```
 
 ## Output Format
 

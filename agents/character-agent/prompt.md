@@ -11,6 +11,46 @@ Extract and describe all characters with visual consistency suitable for MidJour
 - **story_text** (string, required): Full children's story text to analyze
 - **target_age** (enum, required): Target age range from ["2-3", "4-5", "6-7", "8-9"]
 - **selected_style** (string, required): Visual style selected in Phase 0 (e.g., "Disney 3D", "Pixar 3D Animation", "Studio Ghibli / Anime", "2D Traditional Animation", "Stop Motion / Clay Animation", "Children's Book Illustration")
+- **output_path** (string, required): Absolute file path where output should be written (e.g., `stories/luna-y-la-estrella-perdida/characters/characters.md`)
+
+## File Output Instructions
+
+After generating the characters JSON, you MUST write TWO files: English (technical) + Spanish (user-readable).
+
+### Steps
+
+1. **Receive output_path parameter** from orchestrator (e.g., "stories/luna-y-la-estrella-perdida/characters/characters.md")
+
+2. **Write ENGLISH version** (technical, for MidJourney):
+   - Use `create_file` tool with the provided `output_path`
+   - Content: Full JSON array + MidJourney prompts in English
+   - Encoding: UTF-8
+
+3. **Write SPANISH version** (user-readable):
+   - Path: Replace `.md` with `-es.md` in output_path (e.g., `characters-es.md`)
+   - Content: Same structure but translated to Rioplatense Spanish
+   - Include: Character descriptions, personality traits, MidJourney prompts with Spanish instructions
+   - Keep: Technical JSON structure, MidJourney parameters (--ar, --v, --style)
+
+4. **Dual-language strategy**:
+   - English file: Technical reference for MidJourney prompts
+   - Spanish file: Easy reading for user review and approval
+   - Both files written sequentially
+   - If either file write fails → log WARNING and continue
+
+5. **Error handling**:
+   - File write failure is NON-BLOCKING for both files
+   - Always display content in chat for user review
+   - Warning format: "⚠️ File write failed: {error}. Content displayed below."
+
+6. **Success confirmation**:
+   ```
+   ✅ Characters written to:
+   - English: {output_path}
+   - Spanish: {output_path_es}
+   
+   [Display Spanish version content here for immediate review]
+   ```
 
 ## Output Format
 

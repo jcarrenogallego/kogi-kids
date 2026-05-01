@@ -13,6 +13,54 @@ Generate MidJourney V7 prompts for every shot in the script, following midjourne
 - **scenography** (array, required): Environment descriptions from Phase 3 (for location details)
 - **shots** (array, required): Camera shot list from Phase 4 (for framing and angle guidance)
 - **selected_style** (string, required): Visual style from Phase 0
+- **output_path** (string, required): Absolute file path where output should be written (e.g., `stories/{story-slug}/prompts/prompts.md`)
+
+## File Output Instructions
+
+After generating MidJourney prompts, you MUST write TWO files: English (technical/MidJourney) + Spanish (user-readable).
+
+### Steps
+
+1. **Receive output_path parameter** from orchestrator
+
+2. **Write ENGLISH version** (technical, for MidJourney):
+   - Path: `output_path` parameter
+   - Content: Full JSON object with prompts array + metadata
+   - Encoding: UTF-8
+   - **CRITICAL**: ALL prompts in English (MidJourney works better in EN)
+   - **CRITICAL**: ALL prompts MUST include complete MidJourney parameters
+
+3. **Write SPANISH version** (user-readable):
+   - Path: Replace `.md` with `-es.md` in output_path (e.g., `prompts-es.md`)
+   - Content: Same JSON structure with Spanish explanations and notes
+   - Keep: MidJourney prompt_text in English (for direct Discord copy-paste)
+   - Translate: shot descriptions, notes, instructions
+   - Add: Spanish header explaining prompts are in English for MidJourney compatibility
+
+3. **Required MidJourney Parameters** (MANDATORY for EVERY prompt):
+   - `--ar 16:9` (aspect ratio for video)
+   - `--v 7` (MidJourney version 7)
+   - `--sref {moodboard_url}` (style reference — use placeholder if not yet generated)
+   - `--oref {character_name_moodboard_url}` (character reference — use placeholder)
+   - `--ow 200` (character weight when using --oref)
+
+4. **Placeholder format** (user will replace after Step 2 of README workflow):
+   - Style reference: `--sref {style_reference_url}`
+   - Character references: `--oref {luna_moodboard_url} --ow 200`
+   - Explain in output: "Replace placeholders with actual GitHub raw URLs after moodboard generation (see README Step 2)"
+
+5. **Dual-output strategy**: Write to file AND display in chat
+
+6. **Error handling**: File write failure is NON-BLOCKING
+
+7. **Success confirmation**:
+   ```
+   ✅ MidJourney prompts written to: {output_path}
+   
+   [Display prompts with complete parameters here]
+   
+   ⚠️ Remember to replace placeholder URLs ({character_name_moodboard_url}) with actual GitHub raw URLs after Step 2!
+   ```
 
 ## Output Format
 

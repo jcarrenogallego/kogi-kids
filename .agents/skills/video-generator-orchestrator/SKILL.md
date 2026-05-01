@@ -192,21 +192,52 @@ For **each phase** (1-6), after receiving agent output:
    )
    ```
 
-2. **Display in chat** (ALWAYS, even if file write succeeds):
+2. **Write SPANISH version** (user-readable):
+   ```python
+   output_path_es = story_root / subdirectory / filename.replace(".md", "-es.md")
+   
+   create_file(
+       filePath=str(output_path_es),
+       content=agent_output_translated_to_spanish
+   )
+   ```
+
+3. **Display in chat** (ALWAYS, even if file write succeeds):
    ```
    ## Fase {N}: {Agent Name} — Resultados
    
-   ✅ Escrito en: stories/{story-slug}/{subdirectory}/{filename}.md
+   ✅ Escrito en:
+   - English: stories/{story-slug}/{subdirectory}/{filename}.md
+   - Spanish: stories/{story-slug}/{subdirectory}/{filename}-es.md
    
-   {agent_output_formatted}
+   {agent_output_formatted_in_spanish}
    
    ¿Aprobás este resultado o querés cambios?
    ```
 
-3. **Error handling**: File write failure is **NON-BLOCKING**
+4. **Error handling**: File write failure is **NON-BLOCKING** for both files
    - Log WARNING
    - Continue workflow with chat-only output
    - Ensure user sees content regardless of file write status
+
+### Dual-Language Output Strategy
+
+**Why Two Languages**:
+- **English version** (`{filename}.md`): Technical reference, MidJourney prompts work better in English
+- **Spanish version** (`{filename}-es.md`): User-readable, easy review without translation friction
+
+**Language Rules**:
+- English file: All technical content, JSON structures, MidJourney prompts with parameters
+- Spanish file: Same structure, translated descriptions/explanations, MidJourney prompts stay in English (for direct Discord copy-paste)
+- Both files: Written sequentially by each agent
+
+**Applies to**:
+- Phase 1: `characters.md` / `characters-es.md`
+- Phase 2: `dialogues.md` / `dialogues-es.md`
+- Phase 3: `scenography.md` / `scenography-es.md`
+- Phase 4: `cinematography.md` / `cinematography-es.md`
+- Phase 5: `script.md` / `script-es.md`
+- Phase 6: `prompts.md` / `prompts-es.md`
 
 ### Phase Execution Pattern
 
@@ -429,6 +460,9 @@ And this story:
 
 {story_input}
 
+**Selected Style**: {selected_style}
+**Target Age**: {target_age}
+
 Generate dialogue script with:
 
 1. **Scene breakdown**: Divide story into 5-10 scenes (each = 15-30 seconds for ages 2-4, 30-60 seconds for ages 5-10)
@@ -446,7 +480,7 @@ Generate dialogue script with:
 - Ages 6-7: Max 150 words per scene, some complex sentences
 - Ages 8-10: Max 200 words per scene, narrative complexity allowed
 
-Apply kids-book-writer skill for vocabulary and storytelling skill for pacing.
+Apply kids-book-writer skill for vocabulary and storytelling skill for pacing. Pacing should match {selected_style} conventions (Disney 3D: cinematic pacing, Ghibli: gentle pacing, etc.)
 ```
 
 **Skills to inject**: `kids-book-writer`, `storytelling`
@@ -474,7 +508,9 @@ And these characters:
 
 {character_descriptions}
 
-Generate scenography descriptions for each scene:
+**Selected Style**: {selected_style}
+
+Generate scenography descriptions for each scene matching {selected_style} visual conventions:
 
 1. **Location**: Beach, forest, bedroom, spaceship, etc.
 2. **Time of Day**: Morning, afternoon, sunset, night
@@ -511,9 +547,10 @@ output_path = story_root / "scenography" / "scenography.md"  # Absolute path
 Given:
 - Dialogue script: {dialogue_script}
 - Scene descriptions: {scene_descriptions}
-- Target age: {age_range}
+- Target age: {target_age}
+- Selected style: {selected_style}
 
-Generate shot list for each scene:
+Generate shot list for each scene matching {selected_style} cinematography conventions:
 
 1. **Shot Number**: Sequential (e.g., Shot 1.1, 1.2 for scene 1)
 2. **Shot Type**:
@@ -561,8 +598,9 @@ Given:
 - Dialogue: {dialogue_script}
 - Scenography: {scene_descriptions}
 - Shot list: {shot_list}
+- Selected style: {selected_style}
 
-Generate unified script in professional format:
+Generate unified script in professional format for {selected_style} production:
 
 For EACH scene:
 
@@ -618,7 +656,9 @@ Given this complete script:
 
 {full_script}
 
-Generate MidJourney V7 prompts for EACH shot:
+**Selected Style**: {selected_style}
+
+Generate MidJourney V7 prompts for EACH shot using {selected_style} tags consistently:
 
 **Prompt Structure**:
 ```

@@ -11,6 +11,39 @@ Describe locations and environments for each scene with color palettes, lighting
 - **scenes** (array, required): Dialogue script from Phase 2 (Dialogue Agent output)
 - **characters** (array, required): Character descriptions from Phase 1 for color palette consistency
 - **selected_style** (string, required): Visual style from Phase 0 (Disney 3D, Pixar, Ghibli, etc.)
+- **output_path** (string, required): Absolute file path where output should be written (e.g., `stories/{story-slug}/scenography/scenography.md`)
+
+## File Output Instructions
+
+After generating scenography descriptions, you MUST write TWO files: English (technical) + Spanish (user-readable).
+
+### Steps
+
+1. **Receive output_path parameter** from orchestrator
+
+2. **Write ENGLISH version** (technical reference):
+   - Path: `output_path` parameter
+   - Content: Full JSON array with all scene descriptions in English
+   - Encoding: UTF-8
+
+3. **Write SPANISH version** (user-readable):
+   - Path: Replace `.md` with `-es.md` in output_path (e.g., `scenography-es.md`)
+   - Content: Same JSON structure with descriptions translated to Spanish
+   - Translate: location names, atmosphere descriptions, mood descriptions
+   - Keep: midjourney_scene_tags in English (MidJourney works better in EN)
+
+4. **Dual-language strategy**: Write both files AND display Spanish in chat
+
+5. **Error handling**: File write failure is NON-BLOCKING for both files
+
+6. **Success confirmation**:
+   ```
+   ✅ Scenography written to:
+   - English: {output_path}
+   - Spanish: {output_path_es}
+   
+   [Display Spanish version scene descriptions here]
+   ```
 
 ## Output Format
 

@@ -12,6 +12,43 @@ Write dialogue scripts with scene breakdowns, character lines, narration, and ti
 - **story_text** (string, required): Full story text to adapt into dialogue
 - **target_age** (enum, required): Target age range from ["2-3", "4-5", "6-7", "8-9"]
 - **selected_style** (string, required): Visual style from Phase 0 (affects pacing and tone)
+- **output_path** (string, required): Absolute file path where output should be written (e.g., `stories/{story-slug}/dialogues/dialogues.md`)
+
+## File Output Instructions
+
+After generating the dialogue script, you MUST write TWO files: English (technical) + Spanish (user-readable).
+
+### Steps
+
+1. **Receive output_path parameter** from orchestrator
+
+2. **Write ENGLISH version** (technical reference):
+   - Path: `output_path` parameter
+   - Content: Full JSON array with all scenes and dialogue in English
+   - Encoding: UTF-8
+
+3. **Write SPANISH version** (user-readable):
+   - Path: Replace `.md` with `-es.md` in output_path (e.g., `dialogues-es.md`)
+   - Content: Same JSON structure with all dialogue translated to Spanish
+   - Use Rioplatense Spanish for dialogue lines and narration
+   - Keep: JSON structure, technical fields (scene_number, duration_seconds)
+
+4. **Dual-language strategy**:
+   - English file: Technical reference
+   - Spanish file: Easy reading for user review and approval
+   - Both files written sequentially
+   - If either file write fails → WARNING only, continue with chat output
+
+5. **Error handling**: File write failure is NON-BLOCKING for both files
+
+6. **Success confirmation**:
+   ```
+   ✅ Dialogue script written to:
+   - English: {output_path}
+   - Spanish: {output_path_es}
+   
+   [Display Spanish version formatted dialogue here]
+   ```
 
 ## Output Format
 
