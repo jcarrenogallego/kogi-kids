@@ -176,14 +176,8 @@ Generate prompts in **Markdown format** organized by scene. Each prompt must inc
 
 1. **Standard structure**: `[subject] [action] [details] [environment] [camera angle] [lighting] [color mood] [style] --parameters`
    - **Subject**: Characters (with consistency tags) or location
-     - **CRITICAL**: For Disney 3D style, ALWAYS describe characters as: `{age} year old {descriptor} character in disney 3d animation style`
-     - Example: "7 year old latina girl character in disney 3d animation style with wavy dark brown hair"
-     - This prevents realistic/photorealistic rendering
    - **Action**: What's happening (running, looking up, sitting)
    - **Details**: Specific features (clothing, props, expressions)
-     - Use "expressive stylized features" NOT "detailed facial features"
-     - Use "large expressive disney-style eyes" NOT just "large eyes"
-     - Use "smooth stylized animation" NOT "photorealistic skin"
    - **Environment**: Location context (forest, beach, bedroom)
    - **Camera angle**: Shot type and framing (close-up, wide shot, low angle)
    - **Lighting**: Light sources and mood (moonlight, golden hour, soft lighting)
@@ -225,8 +219,8 @@ Generate prompts in **Markdown format** organized by scene. Each prompt must inc
 ### Style Consistency Rules
 
 7. **Match selected style** (from Phase 0):
-   - **Disney 3D**: `disney 3d pixar style, cinematic lighting, stylized detailed textures, stylized disney materials, volumetric lighting, soft shadows --ar 16:9 --v 7 --sref {seed} --sw 200`
-   - **Pixar 3D**: `pixar animation style, vibrant colors, soft lighting, stylized characters, stylized detailed materials --ar 16:9 --v 7 --sref {seed} --sw 200`
+   - **Disney 3D**: `disney 3d pixar style, cinematic lighting, detailed textures, photorealistic materials, volumetric lighting, soft shadows --ar 16:9 --v 7 --sref {seed} --sw 200`
+   - **Pixar 3D**: `pixar animation style, vibrant colors, soft lighting, stylized characters, detailed materials --ar 16:9 --v 7 --sref {seed} --sw 200`
    - **Studio Ghibli**: `studio ghibli style, hand drawn animation, watercolor backgrounds, anime aesthetic --niji 6 --style scenic`
    - **2D Traditional**: `traditional 2d animation, disney classic style, cel shading, clean line art --ar 16:9 --v 7 --sref {seed} --sw 150`
    - **Stop Motion**: `stop motion animation, claymation style, textured surfaces, handcrafted miniature --ar 16:9 --v 7 --sref {seed} --sw 100`
