@@ -1,0 +1,101 @@
+{
+  "name": "scriptwriter-agent",
+  "version": "1.0.0",
+  "description": "Assemble unified production script synchronizing characters, dialogue, scenography, and cinematography with timing alignment",
+  "runtime": "mcp",
+  "protocol_version": "2024-11-05",
+  "capabilities": {
+    "tools": [
+      "assemble_script",
+      "format_screenplay",
+      "synchronize_timing",
+      "validate_consistency"
+    ],
+    "resources": [
+      "fountain-format-templates",
+      "timing-calculator",
+      "technical-cue-library"
+    ],
+    "prompts": [
+      "script_assembly_prompt"
+    ]
+  },
+  "inputs": {
+    "characters": {
+      "type": "array",
+      "description": "Character descriptions from Phase 1",
+      "required": true
+    },
+    "scenes": {
+      "type": "array",
+      "description": "Dialogue script from Phase 2",
+      "required": true
+    },
+    "scenography": {
+      "type": "array",
+      "description": "Environment descriptions from Phase 3",
+      "required": true
+    },
+    "shots": {
+      "type": "array",
+      "description": "Camera shot list from Phase 4",
+      "required": true
+    },
+    "selected_style": {
+      "type": "string",
+      "description": "Visual style from Phase 0",
+      "required": true
+    }
+  },
+  "outputs": {
+    "script": {
+      "type": "string",
+      "description": "Complete production script in Markdown format (Fountain-inspired)",
+      "format": "markdown"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Script statistics and validation results",
+      "properties": {
+        "total_scenes": {"type": "integer"},
+        "total_shots": {"type": "integer"},
+        "estimated_duration_minutes": {"type": "number"},
+        "character_count": {"type": "integer"},
+        "timing_mismatches": {
+          "type": "array",
+          "description": "Scenes where shot durations don't match dialogue estimates",
+          "items": {"type": "string"}
+        },
+        "orphaned_elements": {
+          "type": "array",
+          "description": "Dialogue or shots without proper linkage",
+          "items": {"type": "string"}
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "skills": [
+      "mockumentary-screenplay",
+      "storytelling"
+    ]
+  },
+  "error_handling": {
+    "missing_phase_data": {
+      "severity": "error",
+      "message": "All phase outputs (1-4) required: characters, scenes, scenography, shots"
+    },
+    "timing_mismatch": {
+      "severity": "warning",
+      "message": "Scene shot durations don't match dialogue duration estimates (±10%)"
+    },
+    "orphaned_dialogue": {
+      "severity": "error",
+      "message": "Dialogue line has no corresponding shot"
+    },
+    "character_inconsistency": {
+      "severity": "warning",
+      "message": "Character description in script doesn't match Phase 1 output"
+    }
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "name": "character-agent",
+  "version": "1.0.0",
+  "description": "Extract characters from story with MidJourney consistency tags for visual coherence across video frames",
+  "runtime": "mcp",
+  "protocol_version": "2024-11-05",
+  "capabilities": {
+    "tools": [
+      "extract_characters",
+      "generate_consistency_tags",
+      "age_appropriate_traits"
+    ],
+    "resources": [
+      "character-design-patterns",
+      "age-vocabulary-guidelines",
+      "midjourney-style-references"
+    ],
+    "prompts": [
+      "character_extraction_prompt"
+    ]
+  },
+  "inputs": {
+    "story_text": {
+      "type": "string",
+      "description": "Full children's story text to analyze for character extraction",
+      "required": true
+    },
+    "target_age": {
+      "type": "string",
+      "enum": ["2-3", "4-5", "6-7", "8-9"],
+      "description": "Target age range for age-appropriate trait descriptions",
+      "required": true
+    },
+    "selected_style": {
+      "type": "string",
+      "description": "Visual style selected in Phase 0 (Disney 3D, Pixar 3D, Studio Ghibli, 2D Traditional, Stop Motion, Book Illustration)",
+      "required": true
+    }
+  },
+  "outputs": {
+    "characters": {
+      "type": "array",
+      "description": "Array of character objects with complete descriptions and consistency tags",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Character's name"
+          },
+          "role": {
+            "type": "string",
+            "description": "Narrative role (protagonist, antagonist, sidekick, etc.)"
+          },
+          "age": {
+            "type": "string",
+            "description": "Character's age or age range"
+          },
+          "physical_traits": {
+            "type": "object",
+            "description": "Visual physical characteristics",
+            "properties": {
+              "ethnicity": {"type": "string"},
+              "skin_tone": {"type": "string"},
+              "hair": {"type": "string"},
+              "body_type": {"type": "string"},
+              "distinguishing_features": {"type": "string"}
+            }
+          },
+          "wardrobe": {
+            "type": "object",
+            "description": "Clothing and accessories",
+            "properties": {
+              "outfit_description": {"type": "string"},
+              "color_palette": {"type": "string"},
+              "style_notes": {"type": "string"}
+            }
+          },
+          "personality_archetype": {
+            "type": "string",
+            "description": "Core personality traits affecting visual expressions"
+          },
+          "consistency_tags": {
+            "type": "array",
+            "description": "Specific visual anchors for MidJourney consistency across frames",
+            "items": {"type": "string"}
+          },
+          "midjourney_style_reference": {
+            "type": "string",
+            "description": "MidJourney V7 style tags and parameters matching selected style"
+          }
+        },
+        "required": ["name", "role", "physical_traits", "wardrobe", "consistency_tags", "midjourney_style_reference"]
+      }
+    }
+  },
+  "dependencies": {
+    "skills": [
+      "character-design-sheet",
+      "kids-book-writer",
+      "midjourney-prompt-engineering"
+    ]
+  },
+  "error_handling": {
+    "missing_characters": {
+      "severity": "error",
+      "message": "Story must contain at least one named character"
+    },
+    "invalid_age_range": {
+      "severity": "error",
+      "message": "target_age must be one of: 2-3, 4-5, 6-7, 8-9"
+    },
+    "missing_style": {
+      "severity": "error",
+      "message": "selected_style is required from Phase 0 (Style Selection)"
+    }
+  }
+}

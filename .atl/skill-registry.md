@@ -262,6 +262,13 @@
 - STOP after each phase, show results, WAIT for explicit approval ("apruebo", "sí", "continúa") before proceeding
 - Dual persistence: Save to Engram (`topic_key = "video-gen/{story-slug}/phase-{N}"`) AND file (`specs/workflows/{story-slug}/{NN}-{phase}.md`)
 - Pass selected style context to ALL subsequent agents (Phase 1-6) as art direction constraint
+- **MCP Agent Discovery** (NEW): When `USE_MCP_AGENTS=true`, load agents from `agents/` directory via MCP protocol instead of inline definitions
+- Agent loading: `discover_agents()` → validate schemas → build registry → `load_mcp_agent(phase)` with skill injection
+- Skill injection: Read `dependencies.skills` from agent.json → resolve compact rules from skill-registry → inject into prompt before launch
+- Feature flag: `USE_MCP_AGENTS=true` (MCP mode) or `false` (legacy mode from SKILL.md.legacy)
+- Graceful fallback: Any MCP error → log warning → use SKILL.md.legacy (workflow never breaks)
+- Error types: `AgentNotFoundError` (agent missing), `InvalidMCPSchemaError` (bad schema), `NoAgentsFoundError` (empty directory)
+- Rollback: Set `USE_MCP_AGENTS=false` → instant rollback to legacy (< 30 seconds, no file deletion needed)
 - Character Agent: JSON array of characters matching selected style (use character-design-sheet skill)
 - Dialogue Agent: JSON array of scenes with age-appropriate vocabulary (use kids-book-writer skill)
 - Scenography Agent: JSON array of scene descriptions matching selected style (use storytelling skill)

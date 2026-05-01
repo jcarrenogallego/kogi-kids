@@ -1,0 +1,127 @@
+{
+  "name": "cinematography-agent",
+  "version": "1.0.0",
+  "description": "Define camera shots, angles, movements, and composition with age-appropriate pacing for children's video",
+  "runtime": "mcp",
+  "protocol_version": "2024-11-05",
+  "capabilities": {
+    "tools": [
+      "select_shot_type",
+      "define_camera_angle",
+      "set_camera_movement",
+      "calculate_shot_duration"
+    ],
+    "resources": [
+      "shot-type-library",
+      "age-pacing-guidelines",
+      "composition-rules"
+    ],
+    "prompts": [
+      "cinematography_shot_list_prompt"
+    ]
+  },
+  "inputs": {
+    "scenes": {
+      "type": "array",
+      "description": "Dialogue script from Phase 2",
+      "required": true
+    },
+    "scenography": {
+      "type": "array",
+      "description": "Environment descriptions from Phase 3",
+      "required": true
+    },
+    "target_age": {
+      "type": "string",
+      "enum": ["2-3", "4-5", "6-7", "8-9"],
+      "description": "Target age for pacing and shot complexity",
+      "required": true
+    },
+    "selected_style": {
+      "type": "string",
+      "description": "Visual style from Phase 0 (affects camera style)",
+      "required": true
+    }
+  },
+  "outputs": {
+    "shots": {
+      "type": "array",
+      "description": "Array of shot objects with camera specifications",
+      "items": {
+        "type": "object",
+        "properties": {
+          "shot_number": {
+            "type": "string",
+            "description": "Format: '{scene}.{shot}' (e.g., '1.1', '1.2', '2.1')"
+          },
+          "scene_number": {
+            "type": "integer",
+            "description": "Matching scene number from dialogue/scenography"
+          },
+          "shot_type": {
+            "type": "string",
+            "description": "Establishing/wide/medium/close-up/detail/POV/OTS"
+          },
+          "camera_angle": {
+            "type": "string",
+            "description": "Eye-level/low/high/dutch/bird's eye/worm's eye"
+          },
+          "camera_movement": {
+            "type": "string",
+            "description": "Static/pan/tilt/zoom/push-in/tracking/crane"
+          },
+          "framing": {
+            "type": "string",
+            "description": "Composition notes (rule of thirds, symmetry, etc.)"
+          },
+          "duration_seconds": {
+            "type": "number",
+            "description": "Shot duration matching age-appropriate pacing"
+          },
+          "transition": {
+            "type": "string",
+            "description": "Cut/fade/dissolve/wipe"
+          },
+          "subject": {
+            "type": "string",
+            "description": "What the shot focuses on"
+          },
+          "action_description": {
+            "type": "string",
+            "description": "What happens during this shot"
+          },
+          "composition_notes": {
+            "type": "string",
+            "description": "Visual composition guidance"
+          },
+          "age_pacing_rationale": {
+            "type": "string",
+            "description": "Why this duration is appropriate for target age"
+          }
+        },
+        "required": ["shot_number", "scene_number", "shot_type", "camera_angle", "duration_seconds", "subject"]
+      }
+    }
+  },
+  "dependencies": {
+    "skills": [
+      "storytelling",
+      "prompt-engineering-patterns",
+      "mockumentary-screenplay"
+    ]
+  },
+  "error_handling": {
+    "missing_scenes": {
+      "severity": "error",
+      "message": "Scenes and scenography arrays required from Phases 2-3"
+    },
+    "duration_too_short": {
+      "severity": "warning",
+      "message": "Shot duration below age minimum (4-6sec for ages 2-3)"
+    },
+    "too_many_shots": {
+      "severity": "warning",
+      "message": "Shot count exceeds age-appropriate complexity"
+    }
+  }
+}

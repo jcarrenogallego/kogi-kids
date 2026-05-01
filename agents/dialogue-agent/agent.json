@@ -1,0 +1,112 @@
+{
+  "name": "dialogue-agent",
+  "version": "1.0.0",
+  "description": "Write age-appropriate dialogue and narration for children's video with proper pacing and vocabulary matching developmental stage",
+  "runtime": "mcp",
+  "protocol_version": "2024-11-05",
+  "capabilities": {
+    "tools": [
+      "write_dialogue",
+      "age_appropriate_vocabulary",
+      "scene_breakdown",
+      "timing_estimation"
+    ],
+    "resources": [
+      "vocabulary-bands",
+      "pacing-guidelines",
+      "emotion-tags"
+    ],
+    "prompts": [
+      "dialogue_writing_prompt"
+    ]
+  },
+  "inputs": {
+    "characters": {
+      "type": "array",
+      "description": "Character descriptions from Phase 1 (Character Agent)",
+      "required": true
+    },
+    "story_text": {
+      "type": "string",
+      "description": "Full story text to adapt into dialogue",
+      "required": true
+    },
+    "target_age": {
+      "type": "string",
+      "enum": ["2-3", "4-5", "6-7", "8-9"],
+      "description": "Target age range for vocabulary and pacing",
+      "required": true
+    },
+    "selected_style": {
+      "type": "string",
+      "description": "Visual style from Phase 0 (affects pacing and tone)",
+      "required": true
+    }
+  },
+  "outputs": {
+    "scenes": {
+      "type": "array",
+      "description": "Array of scene objects with dialogue, narration, and timing",
+      "items": {
+        "type": "object",
+        "properties": {
+          "scene_number": {
+            "type": "integer",
+            "description": "Sequential scene identifier"
+          },
+          "location": {
+            "type": "string",
+            "description": "Where scene takes place"
+          },
+          "duration_estimate_seconds": {
+            "type": "integer",
+            "description": "Estimated scene duration in seconds"
+          },
+          "dialogue": {
+            "type": "array",
+            "description": "Array of dialogue lines",
+            "items": {
+              "type": "object",
+              "properties": {
+                "character": {"type": "string"},
+                "line": {"type": "string"},
+                "emotion": {"type": "string"},
+                "duration_seconds": {"type": "number"}
+              },
+              "required": ["character", "line", "emotion", "duration_seconds"]
+            }
+          },
+          "narration": {
+            "type": "string",
+            "description": "Voice-over narration for scene (optional)"
+          },
+          "pacing_notes": {
+            "type": "string",
+            "description": "Visual focus moments, pauses, rhythm guidance"
+          }
+        },
+        "required": ["scene_number", "location", "duration_estimate_seconds", "dialogue"]
+      }
+    }
+  },
+  "dependencies": {
+    "skills": [
+      "kids-book-writer",
+      "storytelling"
+    ]
+  },
+  "error_handling": {
+    "missing_characters": {
+      "severity": "error",
+      "message": "Characters array required from Phase 1"
+    },
+    "invalid_age_range": {
+      "severity": "error",
+      "message": "target_age must be one of: 2-3, 4-5, 6-7, 8-9"
+    },
+    "word_count_exceeded": {
+      "severity": "warning",
+      "message": "Scene exceeds recommended word count for age range"
+    }
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "name": "prompt-engineer-agent",
+  "version": "1.0.0",
+  "description": "Transform script into MidJourney V7 prompts with character consistency, style coherence, and quality optimization",
+  "runtime": "mcp",
+  "protocol_version": "2024-11-05",
+  "capabilities": {
+    "tools": [
+      "generate_midjourney_prompt",
+      "extract_consistency_tags",
+      "score_prompt_quality",
+      "optimize_parameters"
+    ],
+    "resources": [
+      "midjourney-v7-syntax",
+      "style-reference-library",
+      "quality-scoring-rubric"
+    ],
+    "prompts": [
+      "prompt_engineering_prompt"
+    ]
+  },
+  "inputs": {
+    "script": {
+      "type": "string",
+      "description": "Complete production script from Phase 5",
+      "required": true
+    },
+    "characters": {
+      "type": "array",
+      "description": "Character descriptions from Phase 1 (for consistency tags)",
+      "required": true
+    },
+    "scenography": {
+      "type": "array",
+      "description": "Environment descriptions from Phase 3",
+      "required": true
+    },
+    "shots": {
+      "type": "array",
+      "description": "Camera shot list from Phase 4",
+      "required": true
+    },
+    "selected_style": {
+      "type": "string",
+      "description": "Visual style from Phase 0",
+      "required": true
+    }
+  },
+  "outputs": {
+    "prompts_package": {
+      "type": "object",
+      "description": "Complete MidJourney prompt package with metadata",
+      "properties": {
+        "style_choice": {
+          "type": "string",
+          "description": "Selected visual style"
+        },
+        "midjourney_version": {
+          "type": "string",
+          "description": "MidJourney version (always '7')"
+        },
+        "consistency_strategy": {
+          "type": "string",
+          "description": "How character consistency is achieved"
+        },
+        "character_consistency_tags": {
+          "type": "object",
+          "description": "Map of character names to consistency tag arrays",
+          "additionalProperties": {
+            "type": "array",
+            "items": {"type": "string"}
+          }
+        },
+        "style_reference_base": {
+          "type": "string",
+          "description": "Base style tags used in all prompts"
+        },
+        "prompts": {
+          "type": "array",
+          "description": "Array of MidJourney prompts, one per shot",
+          "items": {
+            "type": "object",
+            "properties": {
+              "shot_number": {"type": "string"},
+              "scene_number": {"type": "integer"},
+              "prompt_text": {"type": "string"},
+              "consistency_tags_used": {
+                "type": "array",
+                "items": {"type": "string"}
+              },
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "aspect_ratio": {"type": "string"},
+                  "style_code": {"type": "string"},
+                  "stylize": {"type": "integer"},
+                  "version": {"type": "integer"},
+                  "chaos": {"type": "integer"}
+                }
+              },
+              "quality_score": {
+                "type": "object",
+                "properties": {
+                  "subject_clarity": {"type": "number"},
+                  "lighting": {"type": "number"},
+                  "color_harmony": {"type": "number"},
+                  "mood": {"type": "number"},
+                  "composition": {"type": "number"},
+                  "material_detail": {"type": "number"},
+                  "spatial_depth": {"type": "number"},
+                  "overall": {"type": "number"}
+                }
+              },
+              "notes": {"type": "string"}
+            },
+            "required": ["shot_number", "prompt_text", "parameters", "quality_score"]
+          }
+        }
+      },
+      "required": ["style_choice", "character_consistency_tags", "style_reference_base", "prompts"]
+    }
+  },
+  "dependencies": {
+    "skills": [
+      "midjourney-prompt-engineering",
+      "character-design-sheet",
+      "prompt-engineering-patterns"
+    ]
+  },
+  "error_handling": {
+    "missing_phase_data": {
+      "severity": "error",
+      "message": "All phase outputs required: script, characters, scenography, shots"
+    },
+    "style_mismatch": {
+      "severity": "error",
+      "message": "selected_style must match Phase 0 choice"
+    },
+    "missing_consistency_tags": {
+      "severity": "warning",
+      "message": "Character appears in shot but consistency tags not applied"
+    },
+    "inconsistent_style_tags": {
+      "severity": "error",
+      "message": "Style tags vary across prompts (all must be identical for consistency)"
+    },
+    "missing_parameters": {
+      "severity": "error",
+      "message": "Prompt missing required parameters (--ar 16:9 --v 7)"
+    },
+    "low_quality_score": {
+      "severity": "warning",
+      "message": "Prompt scored < 6 overall, needs optimization"
+    }
+  }
+}

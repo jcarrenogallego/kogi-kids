@@ -1,0 +1,125 @@
+{
+  "name": "scenography-agent",
+  "version": "1.0.0",
+  "description": "Describe visual environments with color palettes, lighting, and atmosphere matching selected style for MidJourney generation",
+  "runtime": "mcp",
+  "protocol_version": "2024-11-05",
+  "capabilities": {
+    "tools": [
+      "describe_location",
+      "define_color_palette",
+      "set_lighting",
+      "add_sensory_details"
+    ],
+    "resources": [
+      "style-color-palettes",
+      "lighting-presets",
+      "mood-atmosphere-library"
+    ],
+    "prompts": [
+      "scenography_description_prompt"
+    ]
+  },
+  "inputs": {
+    "scenes": {
+      "type": "array",
+      "description": "Dialogue script from Phase 2 (Dialogue Agent)",
+      "required": true
+    },
+    "characters": {
+      "type": "array",
+      "description": "Character descriptions from Phase 1 for color consistency",
+      "required": true
+    },
+    "selected_style": {
+      "type": "string",
+      "description": "Visual style from Phase 0 (Disney 3D, Pixar, Ghibli, etc.)",
+      "required": true
+    }
+  },
+  "outputs": {
+    "scenography": {
+      "type": "array",
+      "description": "Array of scenography objects with environment descriptions",
+      "items": {
+        "type": "object",
+        "properties": {
+          "scene_number": {
+            "type": "integer",
+            "description": "Matching scene number from dialogue script"
+          },
+          "location": {
+            "type": "string",
+            "description": "Specific location name and description"
+          },
+          "time_of_day": {
+            "type": "string",
+            "description": "Time establishing lighting context"
+          },
+          "weather_atmosphere": {
+            "type": "string",
+            "description": "Weather conditions and atmospheric effects"
+          },
+          "key_props": {
+            "type": "array",
+            "description": "3-7 important objects in scene",
+            "items": {"type": "string"}
+          },
+          "color_palette": {
+            "type": "object",
+            "description": "Color scheme for scene",
+            "properties": {
+              "dominant_colors": {"type": "string"},
+              "accent_colors": {"type": "string"},
+              "mood_colors": {"type": "string"}
+            }
+          },
+          "lighting": {
+            "type": "object",
+            "description": "Lighting setup and mood",
+            "properties": {
+              "primary_source": {"type": "string"},
+              "secondary_sources": {"type": "string"},
+              "lighting_mood": {"type": "string"},
+              "shadows": {"type": "string"}
+            }
+          },
+          "mood_tone": {
+            "type": "string",
+            "description": "Overall emotional atmosphere"
+          },
+          "sensory_details": {
+            "type": "string",
+            "description": "Multi-sensory environmental description"
+          },
+          "midjourney_scene_tags": {
+            "type": "string",
+            "description": "MidJourney V7 environment prompt tags"
+          }
+        },
+        "required": ["scene_number", "location", "time_of_day", "color_palette", "lighting", "mood_tone", "midjourney_scene_tags"]
+      }
+    }
+  },
+  "dependencies": {
+    "skills": [
+      "storytelling",
+      "character-design-sheet",
+      "midjourney-prompt-engineering"
+    ]
+  },
+  "error_handling": {
+    "missing_scenes": {
+      "severity": "error",
+      "message": "Scenes array required from Phase 2"
+    },
+    "scene_count_mismatch": {
+      "severity": "warning",
+      "message": "Scenography count should match dialogue scene count"
+    },
+    "invalid_style": {
+      "severity": "error",
+      "message": "selected_style must match Phase 0 style choice"
+    }
+  }
+}
