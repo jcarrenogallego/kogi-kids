@@ -4,7 +4,7 @@
 **Updated**: 2026-05-01  
 **Project**: kogi-kids  
 **Purpose**: Catalog of available skills for sub-agent injection  
-**Total Skills**: 26 user-level + 4 project-level workflows + 7 domain-specific  
+**Total Skills**: 27 user-level + 4 project-level workflows + 7 domain-specific + 1 orchestrator  
 
 ---
 
@@ -38,6 +38,7 @@
 | Prompt engineering, few-shot, chain-of-thought, structured outputs | prompt-engineering-patterns | c:\Users\Alejandra\Documents\JoseCarreno\projects\kogi-kids\.agents\skills\prompt-engineering-patterns\SKILL.md |
 | Storytelling, narrative, story arc, customer stories, SCAR | storytelling | c:\Users\Alejandra\Documents\JoseCarreno\projects\kogi-kids\.agents\skills\storytelling\SKILL.md |
 | Workflow orchestration, Temporal, saga patterns, distributed systems | workflow-orchestration-patterns | c:\Users\Alejandra\Documents\JoseCarreno\projects\kogi-kids\.agents\skills\workflow-orchestration-patterns\SKILL.md |
+| Video generation, genera video, MidJourney prompts, story to video, orchestrate agents | video-generator-orchestrator | c:\Users\Alejandra\Documents\JoseCarreno\projects\kogi-kids\.agents\skills\video-generator-orchestrator\SKILL.md |
 
 ---
 
@@ -254,6 +255,20 @@
 - Timeouts and retries: built-in for activities, exponential backoff, circuit breaker patterns
 - Human-in-the-loop: use signals or activities with long timeouts for approval steps
 - Versioning: use workflow versioning for deployments, old versions finish on old code
+
+### video-generator-orchestrator
+- Orchestrate 6 sequential agents: Character → Dialogue → Scenography → Cinematography → Scriptwriter → Prompt Engineer
+- STOP after each agent, show results, WAIT for explicit approval ("apruebo", "sí", "continúa") before proceeding
+- Save each phase to Engram: `topic_key = "video-gen/{story-slug}/phase-{N}"`, `type = "decision"`
+- If user gives feedback → re-run current agent with constraints, don't proceed to next
+- Character Agent: JSON array of characters with physical traits + MidJourney consistency tags (use character-design-sheet skill)
+- Dialogue Agent: JSON array of scenes with dialogue, duration, age-appropriate vocabulary (use kids-book-writer skill for word limits)
+- Scenography Agent: JSON array of scene descriptions with location, mood, color palette, props (use storytelling skill)
+- Cinematography Agent: JSON array of shots with type, angle, movement, duration (shorter for younger ages)
+- Scriptwriter Agent: Unified text script synchronizing all elements (use mockumentary-screenplay for structure)
+- Prompt Engineer Agent: MidJourney V7 prompts per shot with `--ar 16:9`, style consistency, character tags (use midjourney-prompt-engineering skill)
+- Recovery: Search Engram `"video-gen/{story-slug}"`, find latest phase, offer to resume
+- Final output: Markdown document with all prompts + character consistency tags + Engram archive references
 
 ---
 
