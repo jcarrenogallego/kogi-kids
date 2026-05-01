@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "skills": {
+    "character-design-sheet": {
+      "source": "infsh-skills/skills",
+      "sourceType": "github",
+      "skillPath": "guides/design/character-design-sheet/SKILL.md",
+      "computedHash": "f8f41160f38e1f1cbce4dfc3bbd5849b39a9f6f870d0950ea0a062ec653f943f"
+    },
+    "kids-book-writer": {
+      "source": "jamesrochabrun/skills",
+      "sourceType": "github",
+      "skillPath": "skills/kids-book-writer/SKILL.md",
+      "computedHash": "ac9d38c1353c63fa940fc803dcea88a728f63c0b2d11ed09272d8aca922c734d"
+    },
+    "midjourney-prompt-engineering": {
+      "source": "justinperea/midjourney-cc-skill",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "ef18bcc060925ab7cf5461b05e68842331ec2d5f4e98a7d8209d4d9b4cde9de3"
+    },
+    "mockumentary-screenplay": {
+      "source": "joelborellis/screenplay-mockumentary",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/screenplay/SKILL.md",
+      "computedHash": "6c2f1e3a78e75ee0972a3589102b5f1e5613cb9cf7d85e07323c10157c78b037"
+    },
+    "prompt-engineering-patterns": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "skillPath": "plugins/llm-application-dev/skills/prompt-engineering-patterns/SKILL.md",
+      "computedHash": "da802e85b6c7e53d343ec19fb331afb5b00afd3fb9b1964e39f75c753b239a4f"
+    },
+    "storytelling": {
+      "source": "gtmagents/gtm-agents",
+      "sourceType": "github",
+      "skillPath": "plugins/content-marketing/skills/storytelling/SKILL.md",
+      "computedHash": "15f9df1eb9b95319a729b27a6ef37ea264c431ae16d42f9741e74b1b313fa7a5"
+    },
+    "workflow-orchestration-patterns": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "skillPath": "plugins/backend-development/skills/workflow-orchestration-patterns/SKILL.md",
+      "computedHash": "f197e2cf2b2d98aaee65a3002994b4a6ea524ad7bd16dbb1621fcbb4bfebe8f7"
+    }
+  }
+}
