@@ -257,26 +257,32 @@
 - Versioning: use workflow versioning for deployments, old versions finish on old code
 
 ### video-generator-orchestrator
-- Orchestrate 7 sequential phases: Style Selection → Character → Dialogue → Scenography → Cinematography → Scriptwriter → Prompt Engineer
-- Phase 0 (Style Selection): Present 6 visual style options (Disney 3D, Pixar, Ghibli/Anime, 2D Traditional, Stop Motion, Book Illustration), wait for user choice
+- Orchestrate 8 phases: Phase -1 (Initialize Structure) → Phase 0 (Style Selection) → Character → Dialogue → Scenography → Cinematography → Scriptwriter → Prompt Engineer → Phase 7 (Generate README)
+- **Phase -1**: Create `stories/{story-slug}/` with 7 subdirectories (characters, dialogues, scenography, cinematography, scripts, prompts, moodboard) BEFORE Phase 0
+- **Phase 0** (Style Selection): Present 6 visual style options (Disney 3D, Pixar, Ghibli/Anime, 2D Traditional, Stop Motion, Book Illustration), wait for user choice
+- **Phase 1-6**: Each agent writes deliverables to `stories/{story-slug}/{subdir}/{file}.md` AND returns to chat (dual-output strategy)
+- **Phase 7**: Generate README.md with step-by-step MidJourney workflow (moodboard-first approach, character consistency instructions)
 - STOP after each phase, show results, WAIT for explicit approval ("apruebo", "sí", "continúa") before proceeding
-- Dual persistence: Save to Engram (`topic_key = "video-gen/{story-slug}/phase-{N}"`) AND file (`specs/workflows/{story-slug}/{NN}-{phase}.md`)
+- Triple persistence: Engram (`topic_key = "video-gen/{story-slug}/phase-{N}"`), workflow files (`specs/workflows/{story-slug}/{NN}-{phase}.md`), story deliverables (`stories/{story-slug}/{subdir}/`)
 - Pass selected style context to ALL subsequent agents (Phase 1-6) as art direction constraint
-- **MCP Agent Discovery** (NEW): When `USE_MCP_AGENTS=true`, load agents from `agents/` directory via MCP protocol instead of inline definitions
+- **Directory creation failure** → CRITICAL → HALT workflow (cannot proceed without structure)
+- **File write failure** (agent) → WARNING → fallback to chat-only output (workflow continues)
+- **README generation failure** → WARNING → workflow completes (non-blocking)
+- Feature flag: `WRITE_DELIVERABLES_TO_FILES=true|false` for rollback to chat-only mode
+- Cross-platform: use `pathlib.Path`, UTF-8 encoding, Git commits forward slashes
+- Story slug sanitization: lowercase, spaces→hyphens, strip non-alphanumeric (e.g., "Luna y la Estrella" → "luna-y-la-estrella")
+- **MCP Agent Discovery**: When `USE_MCP_AGENTS=true`, load agents from `agents/` directory via MCP protocol instead of inline definitions
 - Agent loading: `discover_agents()` → validate schemas → build registry → `load_mcp_agent(phase)` with skill injection
 - Skill injection: Read `dependencies.skills` from agent.json → resolve compact rules from skill-registry → inject into prompt before launch
-- Feature flag: `USE_MCP_AGENTS=true` (MCP mode) or `false` (legacy mode from SKILL.md.legacy)
 - Graceful fallback: Any MCP error → log warning → use SKILL.md.legacy (workflow never breaks)
-- Error types: `AgentNotFoundError` (agent missing), `InvalidMCPSchemaError` (bad schema), `NoAgentsFoundError` (empty directory)
-- Rollback: Set `USE_MCP_AGENTS=false` → instant rollback to legacy (< 30 seconds, no file deletion needed)
 - Character Agent: JSON array of characters matching selected style (use character-design-sheet skill)
 - Dialogue Agent: JSON array of scenes with age-appropriate vocabulary (use kids-book-writer skill)
 - Scenography Agent: JSON array of scene descriptions matching selected style (use storytelling skill)
 - Cinematography Agent: JSON array of shots adapted to selected animation style
 - Scriptwriter Agent: Unified text script synchronizing all elements (use mockumentary-screenplay for structure)
-- Prompt Engineer Agent: MidJourney V7 prompts with `--ar 16:9`, selected style tags, character consistency tags (use midjourney-prompt-engineering skill)
+- Prompt Engineer Agent: MidJourney V7 prompts with `--ar 16:9 --v 7`, `--oref {character_moodboard_url}`, `--ow 200`, `--sref {style_url}` placeholders (use midjourney-prompt-engineering skill)
 - Recovery: Search Engram `"video-gen/{story-slug}"` OR read `specs/workflows/{story-slug}/*.md`, find latest phase, offer to resume
-- Final output: Markdown document with all prompts + character consistency tags + style notes + archive references
+- Final output: All deliverables in `stories/{story-slug}/` + README with MidJourney workflow + archive references
 
 ---
 

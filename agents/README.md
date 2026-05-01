@@ -282,6 +282,75 @@ If you encounter issues with MCP mode:
    - Both modes use same Engram persistence
    - Switching modes doesn't affect saved workflows
 
+## File Output Strategy
+
+### Dual-Output Pattern
+
+All agents follow a **dual-output strategy** for deliverables:
+
+1. **Write to File**: Persist deliverable to `stories/{story-slug}/{subdirectory}/{filename}.md`
+2. **Return to Chat**: Display full deliverable content in chat response
+
+**Benefits**:
+- ✅ Immediate review (user sees output in chat)
+- ✅ Persistence (deliverable saved to disk)
+- ✅ Zero data loss (file write failure → chat fallback)
+- ✅ Git-friendly (all deliverables committable)
+
+### Directory Structure
+
+Each story creates a physical directory structure:
+
+```
+stories/
+└── {story-slug}/               # e.g., luna-y-la-estrella-perdida/
+    ├── characters/
+    │   └── characters.md       # Character descriptions, MJ tags
+    ├── dialogues/
+    │   └── dialogues.md        # Age-appropriate dialogue per scene
+    ├── scenography/
+    │   └── scenography.md      # Environment descriptions
+    ├── cinematography/
+    │   └── cinematography.md   # Camera angles, shot types
+    ├── scripts/
+    │   └── script.md           # Unified script (Fountain format)
+    ├── prompts/
+    │   └── prompts.md          # MidJourney prompts with parameters
+    ├── moodboard/
+    │   └── (user uploads)      # Character reference images
+    └── README.md               # Step-by-step MidJourney workflow
+```
+
+### Feature Flag
+
+**Environment Variable**: `WRITE_DELIVERABLES_TO_FILES`
+
+- **Default**: `true` (file + chat output)
+- **Rollback**: Set to `false` for chat-only mode (legacy behavior)
+
+**Usage**:
+```powershell
+# Disable file writing
+$env:WRITE_DELIVERABLES_TO_FILES="false"
+
+# Re-enable
+$env:WRITE_DELIVERABLES_TO_FILES="true"
+```
+
+### Error Handling
+
+| Error Scenario | Behavior | User Impact |
+|----------------|----------|-------------|
+| Directory creation fails | ❌ CRITICAL — halt workflow | Workflow stops, user notified |
+| File write fails (agent) | ⚠️ WARNING — fallback to chat | Deliverable in chat only, warning displayed |
+| README generation fails | ⚠️ WARNING — workflow completes | Deliverables complete, README missing |
+
+### Cross-Platform Compatibility
+
+- **Path Handling**: `pathlib.Path` auto-converts to OS-native separators
+- **Encoding**: All files written as UTF-8 (emoji support)
+- **Git**: Commits forward slashes regardless of OS
+
 ## Agent Registry (Discovery)
 
 When orchestrator starts with `USE_MCP_AGENTS=true`:

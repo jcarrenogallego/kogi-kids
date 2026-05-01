@@ -10,17 +10,19 @@ Transform children's stories (ages 2-10) into structured MidJourney video prompt
 ## Workflow Overview
 
 ```
-Story Input → Style Selection → [Human Review] → Character Agent → [Human Review] →
-Dialogue Agent → [Human Review] → Scenography Agent → [Human Review] →
-Cinematography Agent → [Human Review] → Scriptwriter Agent → [Human Review] →
-Prompt Engineer Agent → [Human Review] → MidJourney Prompts (Final Output)
+Story Input → Initialize Structure (Phase -1) → Style Selection (Phase 0) → [Human Review] →
+Character Agent (Phase 1) → [Human Review] → Dialogue Agent (Phase 2) → [Human Review] →
+Scenography Agent (Phase 3) → [Human Review] → Cinematography Agent (Phase 4) → [Human Review] →
+Scriptwriter Agent (Phase 5) → [Human Review] → Prompt Engineer Agent (Phase 6) → [Human Review] →
+Generate README (Phase 7) → Complete
 ```
 
 **Core Principle**: STOP after each phase and WAIT for explicit human approval before proceeding to next phase.
 
-**Dual Persistence**: All phases saved to both:
+**Triple Persistence**: All phases saved to:
 - **Engram**: Topic keys `video-gen/{story-slug}/phase-{N}` for session recovery
-- **Files**: `specs/workflows/{story-slug}/{NN}-{phase-name}.md` for Git versioning
+- **Workflow Files**: `specs/workflows/{story-slug}/{NN}-{phase-name}.md` for Git versioning
+- **Story Deliverables**: `stories/{story-slug}/{subdirectory}/{deliverable}.md` for direct MidJourney usage
 
 ## Orchestrator Instructions
 
@@ -37,17 +39,31 @@ When user provides a story:
    - Engram topic key: `video-gen/{story-slug}/{timestamp}`
    - File path: `specs/workflows/{story-slug}/`
 
-3. **Show workflow preview with style selection**:
+3. **Extract story slug**:
+   - If story has a title, sanitize it: lowercase + replace spaces with hyphens + remove special chars
+   - Example: "Luna y la Estrella Perdida" → "luna-y-la-estrella-perdida"
+   - Sanitization pattern:
+     ```python
+     import re
+     story_slug = story_title.lower()
+     story_slug = re.sub(r'[^a-z0-9-]', '-', story_slug)
+     story_slug = re.sub(r'-+', '-', story_slug)  # Collapse multiple hyphens
+     story_slug = story_slug.strip('-')  # Remove leading/trailing hyphens
+     ```
+
+4. **Show workflow preview with style selection**:
    ```
-   Voy a procesar tu historia en 7 fases:
+   Voy a procesar tu historia en 8 fases (incluye inicialización de estructura):
    
+   -1. Initialize Structure → Creo directorios para todos los entregables
    0. Style Selection → Elegís el estilo visual general
-   1. Character Agent → Descripciones de personajes
-   2. Dialogue Agent → Diálogos apropiados para edad
-   3. Scenography Agent → Escenografías y locaciones
-   4. Cinematography Agent → Ángulos de cámara y composición
-   5. Scriptwriter Agent → Guion completo ensamblado
-   6. Prompt Engineer Agent → Prompts MidJourney listos
+   1. Character Agent → Descripciones de personajes (archivo + chat)
+   2. Dialogue Agent → Diálogos apropiados para edad (archivo + chat)
+   3. Scenography Agent → Escenografías y locaciones (archivo + chat)
+   4. Cinematography Agent → Ángulos de cámara y composición (archivo + chat)
+   5. Scriptwriter Agent → Guion completo ensamblado (archivo + chat)
+   6. Prompt Engineer Agent → Prompts MidJourney listos (archivo + chat)
+   7. Generate README → Guía paso a paso para usar prompts en MidJourney
    
    Después de cada fase te pido aprobación antes de continuar.
    
@@ -65,7 +81,132 @@ When user provides a story:
    Elegí un número (1-7) o describí tu estilo preferido.
    ```
 
-4. **Wait for style selection** — do NOT proceed until user selects style
+5. **Wait for style selection** — do NOT proceed until user selects style
+
+## Phase -1: Initialize Story Structure
+
+**Execution**: BEFORE Phase 0 (first step in workflow)
+
+**Purpose**: Create physical directory structure for all story deliverables.
+
+### Instructions
+
+1. **Collect story slug** (from step 3 of Initialization)
+
+2. **Create directory structure**:
+   ```python
+   from pathlib import Path
+   
+   base_dir = Path("stories") / story_slug
+   subdirs = ["characters", "dialogues", "scenography", "cinematography", 
+              "scripts", "prompts", "moodboard"]
+   
+   try:
+       for subdir in subdirs:
+           (base_dir / subdir).mkdir(parents=True, exist_ok=True)
+       print(f"✅ Directory structure created at: stories/{story_slug}/")
+       story_root = base_dir
+   except Exception as e:
+       print(f"❌ CRITICAL: Failed to create directory structure: {e}")
+       print("⚠️ HALTING WORKFLOW - Cannot proceed without directory structure")
+       raise  # HALT workflow
+   ```
+
+3. **Store `story_root` and `story_slug` in workflow state** for use in all subsequent phases
+
+4. **Idempotent behavior**: Safe to re-run — existing directories preserved, `exist_ok=True` prevents errors
+
+5. **Error handling**:
+   - Directory creation failure → **CRITICAL** → **HALT entire workflow**
+   - User notification: "No puedo crear los directorios. Verificá permisos de escritura."
+   - Do NOT proceed to Phase 0 if this fails
+
+6. **User confirmation**:
+   ```
+   ✅ Estructura de directorios creada en: stories/{story-slug}/
+   
+   Subdirectorios creados:
+   - characters/ (descripciones de personajes)
+   - dialogues/ (guiones de diálogo)
+   - scenography/ (descripciones de escenografías)
+   - cinematography/ (lista de tomas)
+   - scripts/ (guion completo)
+   - prompts/ (prompts MidJourney)
+   - moodboard/ (referencias visuales que vos generarás)
+   
+   Ahora sí, arrancamos con Style Selection.
+   ```
+
+## File Writing Pattern (All Phases)
+
+**Dual-Output Strategy**: All agent phases (1-6) write deliverables to BOTH file AND chat.
+
+### Write Helper Pattern
+
+```python
+from pathlib import Path
+
+def write_deliverable(content: str, story_slug: str, subdirectory: str, filename: str) -> dict:
+    """
+    Write deliverable with dual-output strategy.
+    
+    Args:
+        content: Markdown content to write
+        story_slug: Sanitized story slug (e.g., "luna-y-la-estrella-perdida")
+        subdirectory: One of: characters, dialogues, scenography, cinematography, scripts, prompts
+        filename: e.g., "characters.md"
+    
+    Returns:
+        dict with status (success/fallback), path, content
+    """
+    try:
+        # Construct path (cross-platform)
+        output_path = Path("stories") / story_slug / subdirectory / filename
+        
+        # Create parent directory if needed (idempotent)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        # Write file (overwrite if exists)
+        output_path.write_text(content, encoding="utf-8")
+        
+        print(f"✅ Written to: {output_path}")
+        return {"status": "success", "path": str(output_path), "content": content}
+    
+    except Exception as e:
+        print(f"⚠️ WARNING: File write failed: {e}")
+        print(f"⚠️ Falling back to chat-only output")
+        return {"status": "fallback", "error": str(e), "content": content}
+```
+
+### Usage in Phase Instructions
+
+For **each phase** (1-6), after receiving agent output:
+
+1. **Write to file**:
+   ```python
+   result = write_deliverable(
+       content=agent_output_markdown,
+       story_slug=story_slug,
+       subdirectory="characters",  # or dialogues, scenography, etc.
+       filename="characters.md"     # or dialogues.md, scenography.md, etc.
+   )
+   ```
+
+2. **Display in chat** (ALWAYS, even if file write succeeds):
+   ```
+   ## Fase {N}: {Agent Name} — Resultados
+   
+   ✅ Escrito en: stories/{story-slug}/{subdirectory}/{filename}.md
+   
+   {agent_output_formatted}
+   
+   ¿Aprobás este resultado o querés cambios?
+   ```
+
+3. **Error handling**: File write failure is **NON-BLOCKING**
+   - Log WARNING
+   - Continue workflow with chat-only output
+   - Ensure user sees content regardless of file write status
 
 ### Phase Execution Pattern
 
@@ -265,7 +406,12 @@ Apply character-design-sheet skill patterns for turnaround consistency.
 
 **Skills to inject**: `character-design-sheet`, `kids-book-writer` (age-appropriate traits)
 
-**Expected output**: JSON array of 2-8 character descriptions
+**Output file**: Pass `output_path` parameter to character-agent:
+```python
+output_path = story_root / "characters" / "characters.md"  # Absolute path
+```
+
+**Expected output**: JSON array of 2-8 character descriptions written to file AND displayed in chat
 
 ---
 
@@ -305,7 +451,12 @@ Apply kids-book-writer skill for vocabulary and storytelling skill for pacing.
 
 **Skills to inject**: `kids-book-writer`, `storytelling`
 
-**Expected output**: JSON array of scenes with dialogue objects
+**Output file**: Pass `output_path` parameter to dialogue-agent:
+```python
+output_path = story_root / "dialogues" / "dialogues.md"  # Absolute path
+```
+
+**Expected output**: JSON array of scenes with dialogue objects written to file AND displayed in chat
 
 ---
 
@@ -340,7 +491,14 @@ Apply storytelling skill for SCAR framework (setup scenes vs conflict scenes).
 
 **Skills to inject**: `storytelling`, `character-design-sheet` (color palette consistency)
 
-**Expected output**: JSON array of scene descriptions (1 per dialogue scene)
+**Output file**: Pass `output_path` parameter to scenography-agent:
+```python
+output_path = story_root / "scenography" / "scenography.md"  # Absolute path
+```
+
+**Metadata extraction**: Count scene descriptions for README (store as `scene_count` in workflow state)
+
+**Expected output**: JSON array of scene descriptions (1 per dialogue scene) written to file AND displayed in chat
 
 ---
 
@@ -383,7 +541,12 @@ Apply cinematography principles: 3-point lighting assumptions, rule of thirds, e
 
 **Skills to inject**: `storytelling` (visual pacing), `prompt-engineering-patterns` (structured output)
 
-**Expected output**: JSON array of 20-50 shots total (depends on story length)
+**Output file**: Pass `output_path` parameter to cinematography-agent:
+```python
+output_path = story_root / "cinematography" / "cinematography.md"  # Absolute path
+```
+
+**Expected output**: JSON array of 20-50 shots total (depends on story length) written to file AND displayed in chat
 
 ---
 
@@ -436,7 +599,12 @@ Apply mockumentary-screenplay skill for Fountain-like formatting (adapted for an
 
 **Skills to inject**: `mockumentary-screenplay` (script structure), `storytelling` (narrative flow)
 
-**Expected output**: Full text script (plain text or Markdown formatted)
+**Output file**: Pass `output_path` parameter to scriptwriter-agent:
+```python
+output_path = story_root / "scripts" / "script.md"  # Absolute path
+```
+
+**Expected output**: Full text script (plain text or Markdown formatted) written to file AND displayed in chat
 
 ---
 
@@ -500,7 +668,260 @@ Apply midjourney-prompt-engineering skill patterns for V7 syntax, style refs, an
 
 **Skills to inject**: `midjourney-prompt-engineering`, `prompt-engineering-patterns` (few-shot examples), `character-design-sheet` (consistency tags)
 
-**Expected output**: JSON object with 20-50 prompts (1 per shot) + metadata
+**Output file**: Pass `output_path` parameter to prompt-engineer-agent:
+```python
+output_path = story_root / "prompts" / "prompts.md"  # Absolute path
+```
+
+**Metadata extraction**: Extract `character_count` from character descriptions for README (store in workflow state)
+
+**Expected output**: JSON object with 20-50 prompts (1 per shot) + metadata written to file AND displayed in chat
+
+---
+
+## Phase 7: Generate README
+
+**Execution**: AFTER Phase 6 (Prompt Engineer Agent) completes and user approves
+
+**Purpose**: Auto-generate README.md with step-by-step MidJourney workflow instructions for the user.
+
+### Instructions
+
+1. **Collect metadata from workflow state**:
+   - `story_title` (human-readable title)
+   - `story_slug` (sanitized slug)
+   - `selected_style` (from Phase 0)
+   - `character_count` (extracted from Phase 1 output — count character sections)
+   - `scene_count` (extracted from Phase 3 output — count scene descriptions)
+   - `story_root` (from Phase -1)
+
+2. **Populate README template** (see template below)
+
+3. **Write README to file**:
+   ```python
+   readme_path = story_root / "README.md"
+   try:
+       readme_path.write_text(readme_content, encoding="utf-8")
+       print(f"✅ README.md created at: {readme_path}")
+   except Exception as e:
+       print(f"⚠️ WARNING: README generation failed: {e}")
+       # Non-blocking — continue workflow
+   ```
+
+4. **Display confirmation**:
+   ```
+   ✅ README.md generado en: stories/{story-slug}/README.md
+   
+   Este archivo contiene:
+   - Resumen del proyecto
+   - Instrucciones paso a paso para MidJourney
+   - Referencias a todos los archivos generados
+   
+   Ya podés empezar a generar imágenes siguiendo el README!
+   ```
+
+### README Template
+
+```markdown
+# {story_title} — Video Generation Workflow
+
+**Style**: {selected_style}  
+**Characters**: {character_count}  
+**Scenes**: {scene_count}  
+**Generated**: {current_date}
+
+---
+
+## Overview
+
+This directory contains all deliverables for generating the "{story_title}" video using MidJourney V7. Follow the step-by-step workflow below to transform these prompts into a complete video.
+
+## Prerequisites
+
+- MidJourney V7 subscription (Standard or Pro recommended)
+- GitHub account (for hosting moodboard reference images)
+- Video editing software (CapCut, Adobe Premiere, DaVinci Resolve, or iMovie)
+- Audio recording setup for voice-over (optional but recommended)
+
+## File Reference
+
+| File | Description |
+|------|-------------|
+| [characters/characters.md](characters/characters.md) | Character descriptions with consistency tags |
+| [dialogues/dialogues.md](dialogues/dialogues.md) | Scene-by-scene dialogue script |
+| [scenography/scenography.md](scenography/scenography.md) | Environment and setting descriptions |
+| [cinematography/cinematography.md](cinematography/cinematography.md) | Camera angles and shot list |
+| [scripts/script.md](scripts/script.md) | Complete unified production script |
+| [prompts/prompts.md](prompts/prompts.md) | **MidJourney prompts (START HERE)** |
+| moodboard/ | Generated character references (you'll create these) |
+
+---
+
+## Step-by-Step Workflow
+
+### Step 1: Generate Character References (Moodboard-First Approach)
+
+**Why**: Character consistency across all scenes requires reference images. Generate these FIRST before scene images.
+
+1. Open [prompts/prompts.md](prompts/prompts.md)
+2. Find the "Character Reference Prompts" section (if included) OR use character descriptions from [characters/characters.md](characters/characters.md) to create simple turnaround prompts:
+   ```
+   {Character Name}, {physical description from characters.md}, neutral pose, white background, character turnaround sheet, front view, side view, back view, {selected_style} --ar 16:9 --v 7
+   ```
+3. Generate in MidJourney (Discord bot or web app)
+4. Select best generation for EACH character
+5. Download images with high resolution (upscale if needed)
+6. Save to `moodboard/` directory:
+   - `moodboard/{character-name}-reference.png`
+   - Example: `moodboard/luna-reference.png`
+
+**Result**: You now have 1 reference image per character.
+
+### Step 2: Upload Moodboard to GitHub (for --oref URLs)
+
+**Why**: MidJourney's `--oref` parameter requires publicly accessible image URLs. GitHub provides free hosting.
+
+1. Commit `moodboard/` directory to this Git repository:
+   ```bash
+   git add moodboard/
+   git commit -m "Add character reference images for {story_title}"
+   git push origin main
+   ```
+2. Get GitHub raw URLs for each image:
+   - Navigate to GitHub repo in browser
+   - Open `moodboard/{character-name}-reference.png`
+   - Click "Raw" button
+   - Copy URL (format: `https://raw.githubusercontent.com/{user}/{repo}/main/stories/{story-slug}/moodboard/{character}-reference.png`)
+
+3. **Update prompts file**: Replace placeholders in `prompts/prompts.md`:
+   - Find: `{luna_moodboard_url}` (or similar placeholder)
+   - Replace with: actual GitHub raw URL
+   - Repeat for all characters
+
+**Result**: All prompts now have working `--oref` URLs for character consistency.
+
+### Step 3: Generate Style Reference (Optional but Recommended)
+
+**Why**: `--sref` ensures consistent art style across all shots (lighting, color grading, texture).
+
+1. Create a simple style reference prompt:
+   ```
+   {selected_style} style reference, color palette sample, lighting and mood example, no characters, environment only --ar 16:9 --v 7
+   ```
+2. Generate in MidJourney
+3. Select best result that captures the desired style
+4. Download and save to `moodboard/style-reference.png`
+5. Upload to GitHub (repeat Step 2 process)
+6. Get GitHub raw URL
+7. **Update prompts file**: Add `--sref {style_url}` to ALL prompts in `prompts/prompts.md`
+
+**Result**: Consistent style across all generated scenes.
+
+### Step 4: Generate Scene Images
+
+**Now you're ready for the main generation!**
+
+1. Open [prompts/prompts.md](prompts/prompts.md)
+2. Copy prompts in ORDER (Shot 1.1, 1.2, 1.3, etc.)
+3. Paste each prompt into MidJourney
+4. For EACH prompt:
+   - Wait for 4 variations to generate
+   - Select the best one (look for: correct character appearance, matching style, good composition)
+   - Upscale if needed
+   - Download with original filename pattern: `shot-1-1.png`, `shot-1-2.png`, etc.
+5. Save all images to a new folder: `generated-images/`
+
+**Tip**: Use MidJourney's `/describe` command on your moodboard images to verify character consistency if a shot looks off.
+
+**Estimated time**: {scene_count * 3} minutes (assuming ~3 min per shot including selection)
+
+### Step 5: Review and Iterate
+
+1. Lay out all generated images in order (use a slideshow or grid view)
+2. Check for:
+   - ✅ Character consistency (same hair, clothing, features across shots)
+   - ✅ Style consistency (lighting, colors, art style match)
+   - ✅ Scene continuity (props, locations, time of day match script)
+3. **If any shot is off**:
+   - Go back to that prompt
+   - Adjust parameters (increase `--ow` for more character weight, or tweak description)
+   - Regenerate that specific shot
+4. Replace the image in `generated-images/`
+
+**Goal**: All {scene_count} shots look like they belong to the SAME video.
+
+### Step 6: Assemble Video
+
+1. **Import images** to video editor in shot order
+2. **Set durations**: Match duration estimates from [cinematography/cinematography.md](cinematography/cinematography.md)
+   - Typical: 3-5 seconds per shot for ages 2-5, 4-7 seconds for ages 6-10
+3. **Add transitions**: Cuts (most common), fades, or dissolves between scenes
+4. **Record voice-over**: Use dialogue from [dialogues/dialogues.md](dialogues/dialogues.md)
+   - Record each character's lines separately (or hire voice actors)
+   - Import audio tracks
+   - Sync dialogue to corresponding shots
+5. **Add background music**: Choose age-appropriate instrumental tracks
+6. **Add sound effects** (optional): Footsteps, magic sparkles, door creaks, etc.
+7. **Color grading** (optional): Slight adjustments for mood consistency
+8. **Export video**:
+   - Format: MP4 (H.264)
+   - Resolution: 1920x1080 (1080p) or 3840x2160 (4K)
+   - Frame rate: 24fps (cinematic) or 30fps (standard)
+
+**Result**: Complete video ready for sharing!
+
+---
+
+## Troubleshooting
+
+### Character doesn't look consistent across shots
+
+**Solution**: 
+- Increase `--ow` parameter (character weight) from 200 to 300 or 400
+- Ensure `--oref` URL is correct and accessible (test in browser)
+- Regenerate moodboard reference with more detailed description
+
+### Style is inconsistent between shots
+
+**Solution**:
+- Add `--sref` parameter with style reference URL (see Step 3)
+- Use SAME `--style` code across all prompts
+- Check that `--v 7` is included in every prompt
+
+### Prompt is too long (over 350 words)
+
+**Solution**:
+- Remove redundant descriptors
+- Focus on: character, action, setting, camera angle, lighting
+- MidJourney V7 is intelligent — avoid over-prompting
+
+### Image doesn't match the script description
+
+**Solution**:
+- Re-read the shot description in [cinematography/cinematography.md](cinematography/cinematography.md)
+- Adjust prompt to emphasize the KEY element (character emotion, specific prop, camera angle)
+- Regenerate with adjusted prompt
+
+---
+
+## Credits
+
+**Workflow generated by**: video-generator-orchestrator (kogi-kids project)  
+**MidJourney Version**: V7  
+**Story**: {story_title}  
+**Date**: {current_date}
+
+---
+
+## Next Steps After Video Completion
+
+1. Upload to YouTube, Vimeo, or social media
+2. Share with target audience (parents, educators, kids)
+3. Gather feedback for future stories
+4. Archive project files for reference
+
+**🎉 Enjoy your video creation journey!**
+```
 
 ---
 
@@ -926,3 +1347,70 @@ Activate this skill when user says:
 - "orchestrate agents for video"
 
 Also activate when user explicitly mentions `/video-gen` command.
+
+---
+
+## Manual Validation Checklist
+
+After implementing the file output workflow, validate manually (automated tests disabled):
+
+### Test 1: Directory Creation
+- [ ] Start workflow with test story "Test Luna Story"
+- [ ] Verify directory created: `stories/test-luna-story/`
+- [ ] Verify 7 subdirectories exist: characters/, dialogues/, scenography/, cinematography/, scripts/, prompts/, moodboard/
+- [ ] Re-run workflow (same story) — verify no errors (idempotent)
+
+### Test 2: Character Agent File Output
+- [ ] Run Character Agent for test story
+- [ ] Verify file exists: `stories/test-luna-story/characters/characters.md`
+- [ ] Verify file content matches chat output (identical JSON)
+- [ ] Verify file is UTF-8 encoded (check with editor)
+
+### Test 3: README Generation
+- [ ] Complete full workflow (Phases -1 through 6)
+- [ ] Verify README created: `stories/test-luna-story/README.md`
+- [ ] Verify placeholders replaced: {story-slug}, {selected-style}, {character-count}, {scene-count}
+- [ ] Verify README includes all required sections (Overview, Prerequisites, Step-by-Step, File Reference, Tips, Troubleshooting)
+
+### Test 4: Error Scenarios
+- [ ] Invalid slug (e.g., "Story!@#$%") → verify sanitized to "story"
+- [ ] Test file write permission error (readonly directory) → verify WARNING + chat fallback
+- [ ] Test directory creation permission error → verify CRITICAL + workflow halt
+
+### Test 5: Feature Flag Rollback
+- [ ] Set `$env:WRITE_DELIVERABLES_TO_FILES="false"`
+- [ ] Run workflow → verify NO files created
+- [ ] Verify all deliverables appear in chat
+- [ ] Set `$env:WRITE_DELIVERABLES_TO_FILES="true"` → verify files created again
+
+### Test 6: Cross-Platform Paths
+- [ ] On Windows: verify paths use backslashes (e.g., `stories\test-luna-story\characters\`)
+- [ ] Git commit → verify Git uses forward slashes (OS-agnostic)
+- [ ] Verify UTF-8 encoding preserved (test with emoji in story title)
+
+### Test 7: MJ Parameter Completeness
+- [ ] Run Prompt Engineer Agent
+- [ ] Verify ALL prompts include: `--ar`, `--v 7`, `--oref {url}`, `--ow 200`
+- [ ] Verify placeholders present: `{character_name_moodboard_url}`
+- [ ] Copy-paste one prompt to verify format is MidJourney-ready
+
+### Test 8: Dual-Output Strategy
+- [ ] Complete workflow with file write enabled
+- [ ] Verify each deliverable appears in chat AND file
+- [ ] Simulate file write failure (readonly directory) → verify deliverable still in chat
+
+### Test 9: Idempotency
+- [ ] Run workflow twice for same story
+- [ ] Verify second run overwrites files (no errors)
+- [ ] Verify directory creation doesn't fail on second run
+
+### Test 10: End-to-End Workflow
+- [ ] Use real story (e.g., "Luna y la Estrella Perdida")
+- [ ] Execute all phases with human approval
+- [ ] Generate character images in MidJourney (Step 1 of README)
+- [ ] Upload to Git, get URLs (Step 2 of README)
+- [ ] Replace placeholders in prompts.md
+- [ ] Generate 1-2 test scenes (Step 3 of README)
+- [ ] Verify character consistency with `--oref` works
+
+**Validation Status**: Complete these tests before marking the change as production-ready.
