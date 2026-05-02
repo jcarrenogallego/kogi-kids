@@ -169,7 +169,7 @@
 **Copy this prompt (paste in Web UI):**
 
 ```
-/imagine magical tableau of 7 year old latina girl character in disney 3d animation style in star patterned pajamas and bunny slippers emerging from house in background approaching glowing golden star in garden foreground, girl positioned back left walking forward slowly with wonder and caution, hand sized five pointed golden star glowing brilliantly in center right foreground among flowers creating 15 foot radius of warm golden illumination, diagonal composition from girl back left to star front right creating depth and journey line, lush garden with purple lavender and white night jasmine framing edges, natural stone path visible, golden glow illuminating entire garden transforming cool night to warm magical atmosphere, flowers and grass shimmer in radiant light, girl stops 6 feet away and kneels down gently showing respect and care, their first moment of connection creating intimate magical discovery, wide shot transitioning to medium shot via slow dolly in over 8 seconds, deep focus keeping both subjects sharp, disney 3d pixar style, cinematic establishing connection, stylized detailed environment and character, stylized disney materials, volumetric lighting from star creating practical illumination, soft shadows, warm golden and emerald green palette, 8k render quality, professional animation --ar 16:9 --v 7 --sref 1234567890 --sw 200
+/imagine magical tableau of 7 year old latina girl character in disney 3d animation style in blue star patterned pajamas and bunny slippers emerging from house in background approaching glowing golden star in garden foreground, girl positioned back left walking forward slowly with wonder and caution, hand sized five pointed golden star glowing brilliantly in center right foreground among flowers creating 15 foot radius of warm golden illumination, diagonal composition from girl back left to star front right creating depth and journey line, lush garden with purple lavender and white night jasmine framing edges, natural stone path visible, golden glow illuminating entire garden transforming cool night to warm magical atmosphere, flowers and grass shimmer in radiant light, girl stops 6 feet away and kneels down gently showing respect and care, their first moment of connection creating intimate magical discovery, wide shot transitioning to medium shot via slow dolly in over 8 seconds, deep focus keeping both subjects sharp, disney 3d pixar style, cinematic establishing connection, stylized detailed environment and character, stylized disney materials, volumetric lighting from star creating practical illumination, soft shadows, warm golden and emerald green palette, 8k render quality, professional animation --ar 16:9 --v 7 --sref 1234567890 --sw 200
 ```
 
 **Technical Notes**: Diagonal composition creates depth. Luna (back-left) walks toward Estrellita (front-right). Estrellita's 15ft glow provides practical motivated lighting. Camera dollies in slowly from wide to medium shot.  
@@ -184,7 +184,7 @@
 **Purpose**: Show Luna's empathy and emotional intelligence  
 **Shot Reference**: Scene 3, Shot 3A  
 **Duration**: 5 seconds  
-**Image to Upload**: `moodboard/luna.png`  
+**Image to Upload**: `moodboard/luna.png` + `moodboard/estrellita.png`  
 
 **Copy this prompt (paste in Web UI):**
 
@@ -225,7 +225,7 @@
 **Copy this prompt (paste in Web UI):**
 
 ```
-/imagine emotional two shot of 7 year old latina girl character in disney 3d animation style kneeling left and hand sized golden star right on ground creating intimate connection, girl in star patterned pajamas kneeling at child height reaching out slowly with gentle hand near star showing care and respect without touching, golden star resting on grass among flowers tilts upward toward girl showing anthropomorphic body language, classic conversation composition with eyeline from girl looking down to star looking up, negative space between them filled with soft golden glow from star, background garden completely out of focus creating beautiful bokeh with golden light orbs and purple blue flower blurs creating dreamy atmosphere, star pulses brighter in response to girl's kindness showing their bond forming, girl's expression shows determination and empathy building, medium close up framing showing both subjects clearly, slow push in dolly forward over shot tightening frame as emotion builds ending in tight composition emphasizing their connection, shallow depth of field keeping both sharp, eye level between them at kneeling height, disney 3d pixar style, cinematic emotional moment, stylized detailed characters and textures, stylized disney materials, volumetric lighting, soft shadows, warm golden and green palette, intimate connection emphasized, 8k render quality, professional animation --ar 16:9 --v 7 --sref 1234567890 --sw 200
+/imagine emotional two shot of 7 year old latina girl character in disney 3d animation style kneeling left and hand sized golden star right on ground creating intimate connection, girl in blue star patterned pajamas kneeling at child height reaching out slowly with gentle hand near star showing care and respect without touching, golden star resting on grass among flowers tilts upward toward girl showing anthropomorphic body language, classic conversation composition with eyeline from girl looking down to star looking up, negative space between them filled with soft golden glow from star, background garden completely out of focus creating beautiful bokeh with golden light orbs and purple blue flower blurs creating dreamy atmosphere, star pulses brighter in response to girl's kindness showing their bond forming, girl's expression shows determination and empathy building, medium close up framing showing both subjects clearly, slow push in dolly forward over shot tightening frame as emotion builds ending in tight composition emphasizing their connection, shallow depth of field keeping both sharp, eye level between them at kneeling height, disney 3d pixar style, cinematic emotional moment, stylized detailed characters and textures, stylized disney materials, volumetric lighting, soft shadows, warm golden and green palette, intimate connection emphasized, 8k render quality, professional animation --ar 16:9 --v 7 --sref 1234567890 --sw 200
 ```
 
 **Technical Notes**: Classic two-shot composition. Luna left, Estrellita right. Camera pushes in slowly tightening frame over 10 seconds. Background bokeh creates intimacy. This is EMOTIONAL CORE of story.  
@@ -240,12 +240,12 @@
 **Purpose**: Establish threshold between safety and unknown  
 **Shot Reference**: Scene 4, Shot 4A  
 **Duration**: 7 seconds  
-**Image to Upload**: `moodboard/luna.png`  
+**Image to Upload**: `moodboard/luna.png` + `moodboard/estrellita.png`  
 
 **Copy this prompt (paste in Web UI):**
 
 ```
-/imagine dramatic threshold between bright moonlit meadow and dark dense forest at night, clear diagonal composition from bright lower left to dark upper right, peaceful meadow left side with silvery blue grass and wildflowers in moonlight representing safety, dark mysterious forest right side with towering pine and oak trees with thick trunks and twisted roots creating natural archway at entrance representing unknown, 7 year old latina girl character in disney 3d animation style in star patterned pajamas entering frame from left walking across meadow toward forest threshold carrying glowing wicker basket, girl stops at clear boundary line showing hesitation in body language, narrow dirt path winds from meadow into forest darkness barely visible, full moon overhead creating dappled silvery light through forest canopy, girl's basket glows with warm golden light creating 5 foot diameter pool contrasting with cool moonlight, sky visible above showing moon and stars, wide shot from 4 foot eye level in meadow looking toward forest, deep focus showing both environments sharp, mysterious but not frightening atmosphere, disney 3d pixar style, cinematic establishing shot, stylized detailed environment textures, stylized disney materials, volumetric moonlight through trees, soft shadows, cool silvery blue and warm golden color contrast, courageous threshold moment, 8k render quality, professional animation --ar 16:9 --v 7 --sref 1234567890 --sw 200
+/imagine dramatic threshold between bright moonlit meadow and dark dense forest at night, clear diagonal composition from bright lower left to dark upper right, peaceful meadow left side with silvery blue grass and wildflowers in moonlight representing safety, dark mysterious forest right side with towering pine and oak trees with thick trunks and twisted roots creating natural archway at entrance representing unknown, 7 year old latina girl character in disney 3d animation style in blue star patterned pajamas entering frame from left walking across meadow toward forest threshold carrying glowing wicker basket, girl stops at clear boundary line showing hesitation in body language, narrow dirt path winds from meadow into forest darkness barely visible, full moon overhead creating dappled silvery light through forest canopy, girl's basket glows with warm golden light creating 5 foot diameter pool contrasting with cool moonlight, sky visible above showing moon and stars, wide shot from 4 foot eye level in meadow looking toward forest, deep focus showing both environments sharp, mysterious but not frightening atmosphere, disney 3d pixar style, cinematic establishing shot, stylized detailed environment textures, stylized disney materials, volumetric moonlight through trees, soft shadows, cool silvery blue and warm golden color contrast, courageous threshold moment, 8k render quality, professional animation --ar 16:9 --v 7 --sref 1234567890 --sw 200
 ```
 
 **Technical Notes**: Diagonal composition from light (meadow, lower-left) to dark (forest, upper-right). Luna stops at threshold showing hesitation. Clear visual boundary between safe and unknown.  
@@ -258,7 +258,7 @@
 **Purpose**: Show Luna's courage as she enters forest  
 **Shot Reference**: Scene 4, Shot 4C  
 **Duration**: 6 seconds  
-**Image to Upload**: `moodboard/luna.png`  
+**Image to Upload**: `moodboard/luna.png` + `moodboard/estrellita.png`  
 
 **Copy this prompt (paste in Web UI):**
 
@@ -278,15 +278,15 @@
 **Purpose**: Establish mystical meeting place with massive tree  
 **Shot Reference**: Scene 5, Shot 5A  
 **Duration**: 8 seconds  
-**Image to Upload**: `moodboard/luna.png`  
+**Image to Upload**: `moodboard/luna.png` + `moodboard/estrellita.png` + `moodboard/oliver.png`  
 
 **Copy this prompt (paste in Web UI):**
 
 ```
-/imagine majestic ancient oak tree at forest crossroads at night creating mystical meeting place, massive tree dominates center with 8 foot diameter trunk showing deeply gnarled bark and age, thick branches spreading wide creating cathedral like canopy, twisted roots visible at base creating natural stairs and organic shapes, path splits into Y shape at tree base showing left and right options creating literal crossroads, great horned owl with gold spectacles perched on thick branch at 8 foot height mid tree visible, bioluminescent mushrooms at tree base providing subtle green blue accent lighting, moonlight shafts breaking through dense canopy creating atmospheric god rays with dust motes visible in beams, 7 year old latina girl character in disney 3d animation style small at tree roots looking up showing scale and courage, vertical composition emphasizing tree height reaching toward sky, low angle 3 foot height looking up at tree then tilting to owl on branch, dense forest visible in background creating depth, mystical wise atmosphere, wide shot capturing full tree majesty, deep focus showing environment detail, disney 3d pixar style, cinematic establishing shot, stylized detailed bark textures and environment, stylized disney materials, volumetric lighting through canopy, soft shadows, deep forest green and rich brown palette with moonlight accents, magical realism, 8k render quality, professional animation --ar 16:9 --v 7 --sref 1234567890 --sw 200
+/imagine majestic ancient oak tree at forest crossroads at night creating mystical meeting place, massive tree dominates center with 8 foot diameter trunk showing deeply gnarled bark and age, thick branches spreading wide creating cathedral like canopy, great horned owl with gold spectacles perched on thick branch at 8 foot height mid tree clearly visible, twisted roots visible at base creating natural stairs and organic shapes, path splits into Y shape at tree base showing left and right options creating literal crossroads, 7 year old latina girl character in disney 3d animation style wearing blue star patterned pajamas and white bunny slippers standing small at tree roots in three quarter back view gazing upward at the towering tree and owl above, girl's face visible in profile looking UP not at camera, arms at sides in wonder, small figure emphasizing tree's massive scale and her courage, bioluminescent mushrooms at tree base providing subtle green blue accent lighting, moonlight shafts breaking through dense canopy creating atmospheric god rays with dust motes visible in beams, vertical composition emphasizing tree height reaching toward sky, low angle 3 foot height looking up at tree with girl in foreground and owl visible on branch above, dense forest visible in background creating depth, mystical wise atmosphere, wide shot capturing full tree majesty and girl's awe, deep focus showing environment detail, disney 3d pixar style, cinematic establishing shot, stylized detailed bark textures and environment, stylized disney materials, volumetric lighting through canopy, soft shadows, deep forest green and rich brown palette with moonlight accents, magical realism, 8k render quality, professional animation --ar 16:9 --v 7 --sref 1234567890 --sw 200
 ```
 
-**Technical Notes**: Vertical composition emphasizing tree scale. Luna tiny at roots showing her courage. Oliver visible mid-tree. Bioluminescent mushrooms provide subtle accent lighting. Moonlight god rays create atmosphere.  
+**Technical Notes**: Vertical composition emphasizing tree scale. Luna in three-quarter back view at roots gazing UP at tree and owl, NOT at camera. Blue star patterned pajamas clearly visible. Oliver (owl) prominently visible on branch above. Bioluminescent mushrooms provide subtle accent lighting. Moonlight god rays create atmosphere.  
 **Save As**: `renders/5a-ancient-oak.png`
 
 ---
@@ -296,7 +296,7 @@
 **Purpose**: Show Oliver's wise and trustworthy nature  
 **Shot Reference**: Scene 5, Shot 5B  
 **Duration**: 6 seconds  
-**Image to Upload**: `moodboard/luna.png`  
+**Image to Upload**: `moodboard/oliver.png`  
 
 **Copy this prompt (paste in Web UI):**
 
@@ -314,12 +314,12 @@
 **Purpose**: Show Luna continuing journey with guidance received  
 **Shot Reference**: Scene 5, Shot 5E  
 **Duration**: 4 seconds  
-**Image to Upload**: `moodboard/luna.png`  
+**Image to Upload**: `moodboard/luna.png` + `moodboard/estrellita.png` + `moodboard/oliver.png`  
 
 **Copy this prompt (paste in Web UI):**
 
 ```
-/imagine overhead establishing shot of ancient oak tree and forest path at night showing journey continuation, high angle 10 feet looking down at scene with slow crane up revealing more environment, massive oak tree fills left portion of frame, right hand path leads deeper into forest toward right side and background showing direction, 7 year old latina girl character in disney 3d animation style in star patterned pajamas walking away from tree following path, small but determined figure with glowing wicker basket at her side creating small moving point of warm golden light, diagonal composition from tree upper left to girl on path lower right shows journey continuing forward, camera cranes up slowly revealing forest canopy and other trees showing sense of larger world and epic journey scale, girl's small figure shows scale but purposeful movement shows determination and courage, great horned owl visible on branch watching her go as benevolent guardian, girl glances back once over shoulder in gratitude gesture then continues forward confidently, moonlight illuminates path ahead through canopy creating shafts and dappled light, mysterious but guided atmosphere showing she's on right path, dense forest visible with depth, mist at ground level catching light, wide shot capturing departure moment, deep focus showing environment, disney 3d pixar style, cinematic transition shot, stylized detailed environment textures, stylized disney materials, volumetric lighting creating god rays, soft shadows, hope building, 8k render quality, professional animation --ar 16:9 --v 7 --sref 1234567890 --sw 200
+/imagine overhead establishing shot of ancient oak tree and forest path at night showing journey continuation, high angle 10 feet looking down at scene with slow crane up revealing more environment, massive oak tree fills left portion of frame, right hand path leads deeper into forest toward right side and background showing direction, 7 year old latina girl character in disney 3d animation style in blue star patterned pajamas walking away from tree following path, small but determined figure with glowing wicker basket at her side creating small moving point of warm golden light, diagonal composition from tree upper left to girl on path lower right shows journey continuing forward, camera cranes up slowly revealing forest canopy and other trees showing sense of larger world and epic journey scale, girl's small figure shows scale but purposeful movement shows determination and courage, great horned owl visible on branch watching her go as benevolent guardian, girl glances back once over shoulder in gratitude gesture then continues forward confidently, moonlight illuminates path ahead through canopy creating shafts and dappled light, mysterious but guided atmosphere showing she's on right path, dense forest visible with depth, mist at ground level catching light, wide shot capturing departure moment, deep focus showing environment, disney 3d pixar style, cinematic transition shot, stylized detailed environment textures, stylized disney materials, volumetric lighting creating god rays, soft shadows, hope building, 8k render quality, professional animation --ar 16:9 --v 7 --sref 1234567890 --sw 200
 ```
 
 **Technical Notes**: High angle crane shot looking down. Luna walks away on path (diagonal composition). Oliver watches from tree. Camera cranes up revealing larger environment and scope of journey.  
@@ -334,7 +334,7 @@
 **Purpose**: Show Luna's vulnerable moment before rescue  
 **Shot Reference**: Scene 6, Shot 6C  
 **Duration**: 5 seconds  
-**Image to Upload**: `moodboard/luna.png`  
+**Image to Upload**: `moodboard/luna.png` + `moodboard/estrellita.png`  
 
 **Copy this prompt (paste in Web UI):**
 
@@ -352,7 +352,7 @@
 **Purpose**: Create magical spectacle of darkness transforming to light  
 **Shot Reference**: Scene 6, Shot 6D  
 **Duration**: 9 seconds  
-**Image to Upload**: `moodboard/luna.png`  
+**Image to Upload**: `moodboard/luna.png` + `moodboard/estrellita.png` + `moodboard/luciernaga.png`  
 
 **Copy this prompt (paste in Web UI):**
 
@@ -370,7 +370,7 @@
 **Purpose**: Show Luna's joy and wonder at magical rescue  
 **Shot Reference**: Scene 6, Shot 6E  
 **Duration**: 5 seconds  
-**Image to Upload**: `moodboard/luna.png`  
+**Image to Upload**: `moodboard/luna.png` + `moodboard/estrellita.png` + `moodboard/luciernaga.png`  
 
 **Copy this prompt (paste in Web UI):**
 
@@ -390,12 +390,12 @@
 **Purpose**: Establish epic scale of journey's destination  
 **Shot Reference**: Scene 7, Shot 7A  
 **Duration**: 7 seconds  
-**Image to Upload**: `moodboard/luna.png`  
+**Image to Upload**: `moodboard/luna.png` + `moodboard/estrellita.png`  
 
 **Copy this prompt (paste in Web UI):**
 
 ```
-/imagine breathtaking epic panorama of hilltop summit at dawn with spectacular sky, shot from high angle mid air looking down at hilltop and vista, hilltop with gentle rounded peak covered in lush grass and wildflowers occupies lower third of frame, vast magnificent dawn sky dominates upper two thirds showing spectacular gradient from deep indigo blue at zenith transitioning through lavender soft pink coral orange to brilliant gold at horizon where sun just breaking, few stars still faintly visible in darker upper sky including constellation positioned upper right third, panoramic vista visible below hilltop showing distant forest traveled through, rolling hills beyond, valley in distance, perfect horizon line where golden sun emerges meeting earth, 7 year old latina girl character in disney 3d animation style in star patterned pajamas arrives onto summit from path screen left slightly out of breath from climb, sets glowing wicker basket down carefully on grass, looks up at lightening sky seeing constellation above, 7 to 10 fireflies hover around her briefly in gratitude then disperse with gentle farewell flashing, dawn golden light beginning to illuminate everything with warm glow, journey destination reached showing triumph in epic scale composition, camera cranes up slowly revealing full majesty of location and sky, rule of thirds with hilltop at bottom third line, ultra wide shot capturing vastness, deep focus showing all elements sharp, disney 3d pixar style, cinematic epic establishing shot, stylized detailed landscape and sky rendering, stylized disney materials, volumetric lighting creating god rays, soft shadows, spectacular dawn color palette, triumphant atmosphere, 8k render quality, professional animation --ar 16:9 --v 7 --sref 1234567890 --sw 200
+/imagine breathtaking epic panorama of hilltop summit at dawn with spectacular sky, shot from high angle mid air looking down at hilltop and vista, hilltop with gentle rounded peak covered in lush grass and wildflowers occupies lower third of frame, vast magnificent dawn sky dominates upper two thirds showing spectacular gradient from deep indigo blue at zenith transitioning through lavender soft pink coral orange to brilliant gold at horizon where sun just breaking, few stars still faintly visible in darker upper sky including constellation positioned upper right third, panoramic vista visible below hilltop showing distant forest traveled through, rolling hills beyond, valley in distance, perfect horizon line where golden sun emerges meeting earth, 7 year old latina girl character in disney 3d animation style in blue star patterned pajamas arrives onto summit from path screen left slightly out of breath from climb, sets glowing wicker basket down carefully on grass, looks up at lightening sky seeing constellation above, 7 to 10 fireflies hover around her briefly in gratitude then disperse with gentle farewell flashing, dawn golden light beginning to illuminate everything with warm glow, journey destination reached showing triumph in epic scale composition, camera cranes up slowly revealing full majesty of location and sky, rule of thirds with hilltop at bottom third line, ultra wide shot capturing vastness, deep focus showing all elements sharp, disney 3d pixar style, cinematic epic establishing shot, stylized detailed landscape and sky rendering, stylized disney materials, volumetric lighting creating god rays, soft shadows, spectacular dawn color palette, triumphant atmosphere, 8k render quality, professional animation --ar 16:9 --v 7 --sref 1234567890 --sw 200
 ```
 
 **Technical Notes**: EPIC establishing shot. Hilltop lower-third, sky dominates upper two-thirds. Spectacular dawn gradient colors. Camera cranes up revealing full scope. This is CLIMAX location.  
@@ -408,7 +408,7 @@
 **Purpose**: Show Luna's triumph and emotion arriving at destination  
 **Shot Reference**: Scene 7, Shot 7B  
 **Duration**: 6 seconds  
-**Image to Upload**: `moodboard/luna.png`  
+**Image to Upload**: `moodboard/luna.png` + `moodboard/estrellita.png`  
 
 **Copy this prompt (paste in Web UI):**
 
@@ -426,7 +426,7 @@
 **Purpose**: MONEY SHOT - Follow Estrellita's ascent dramatically  
 **Shot Reference**: Scene 7, Shot 7C  
 **Duration**: 12 seconds  
-**Image to Upload**: `moodboard/luna.png`  
+**Image to Upload**: `moodboard/luna.png` + `moodboard/estrellita.png`  
 
 **Copy this prompt (paste in Web UI):**
 
@@ -444,7 +444,7 @@
 **Purpose**: Show cosmic reunion with maximum scale  
 **Shot Reference**: Scene 7, Shot 7D  
 **Duration**: 5 seconds  
-**Image to Upload**: `moodboard/luna.png`  
+**Image to Upload**: `moodboard/estrellita.png`  
 
 **Copy this prompt (paste in Web UI):**
 
