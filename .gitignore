@@ -47,6 +47,11 @@ htmlcov/
 .env
 .env.local
 
+# Runway API outputs
+scripts/.env
+stories/*/animations/progress.json
+stories/*/animations/*.mp4
+
 # Logs
 *.log
 

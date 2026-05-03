@@ -1,0 +1,11 @@
+# Runway Gen-3 API automation dependencies
+# Core dependencies
+runwayml>=4.0.0
+python-dotenv>=1.0.0
+requests>=2.31.0
+
+# Testing dependencies (dev)
+pytest==7.4.3
+pytest-mock==3.12.0
+pytest-asyncio==0.21.1
+responses==0.24.1

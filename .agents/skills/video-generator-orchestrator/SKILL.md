@@ -14,7 +14,7 @@ Story Input → Initialize Structure (Phase -1) → Style Selection (Phase 0) �
 Character Agent (Phase 1) → [Human Review] → Dialogue Agent (Phase 2) → [Human Review] →
 Scenography Agent (Phase 3) → [Human Review] → Cinematography Agent (Phase 4) → [Human Review] →
 Scriptwriter Agent (Phase 5) → [Human Review] → Prompt Engineer Agent (Phase 6) → [Human Review] →
-Generate README (Phase 7) → Complete
+Generate README (Phase 7) → [Optional: Video Animation (Phase 8)] → Complete
 ```
 
 **Core Principle**: STOP after each phase and WAIT for explicit human approval before proceeding to next phase.
@@ -53,7 +53,7 @@ When user provides a story:
 
 4. **Show workflow preview with style selection**:
    ```
-   Voy a procesar tu historia en 8 fases (incluye inicialización de estructura):
+   Voy a procesar tu historia en 9 fases (incluye inicialización de estructura + opcional video animation):
    
    -1. Initialize Structure → Creo directorios para todos los entregables
    0. Style Selection → Elegís el estilo visual general
@@ -64,6 +64,7 @@ When user provides a story:
    5. Scriptwriter Agent → Guion completo ensamblado (archivo + chat)
    6. Prompt Engineer Agent → Prompts MidJourney listos (archivo + chat)
    7. Generate README → Guía paso a paso para usar prompts en MidJourney
+   8. Video Animation (Opcional) → Generar videos animados con Runway Gen-3 API
    
    Después de cada fase te pido aprobación antes de continuar.
    
@@ -965,9 +966,283 @@ This directory contains all deliverables for generating the "{story_title}" vide
 
 ---
 
+## Phase 8: Video Animation (Optional)
+
+**Execution**: AFTER Phase 7 (README) completes  
+**Condition**: User has Runway API key + budget, and storyboard has HIGH priority shots
+
+**Purpose**: Generate actual animated videos from HIGH priority static renders using Runway Gen-3 API automation.
+
+### Pre-Requisites Check
+
+Before offering Phase 8, verify:
+
+1. **Runway API key configured**: Check if `scripts/.env` exists and contains valid `RUNWAY_API_KEY`
+   - If missing: Inform user they need API key from https://runwayml.com
+   - Show setup instructions: "Copy `scripts/.env.example` to `scripts/.env` and add your API key"
+
+2. **HIGH priority shots exist**: Check if `stories/{story-slug}/storyboard-timing.md` has shots marked with:
+   - ⭐ SPECTACLE
+   - 💖 EMOTIONAL CORE  
+   - 🦸‍♀️ HERO MOMENT
+   - 💫 MONEY SHOT
+   - Or explicit `priority: HIGH` comments
+
+3. **Render files exist**: Verify that render files referenced in HIGH priority shots exist in `stories/{story-slug}/renders/`
+
+If any prerequisite fails, skip Phase 8 and show reason: "Phase 8 omitida: {reason}"
+
+### Workflow
+
+1. **Discover HIGH Priority Shots**
+   
+   Run discovery via Python script (DO NOT run as subprocess — use inline Python):
+   ```python
+   import sys
+   sys.path.append("scripts")
+   from runway_animate import discover_shots, load_config, estimate_cost
+   
+   try:
+       config = load_config()
+       shots = discover_shots(story_slug, config)
+       
+       if not shots:
+           print("⚠️ No HIGH priority shots found. Skipping Phase 8.")
+           return None  # Skip Phase 8
+       
+       shot_ids = [s['shot_id'] for s in shots]
+       min_cost, max_cost = estimate_cost(shots, config['default_model'], 
+                                          config['default_duration'])
+       
+       print(f"📋 Found {len(shots)} HIGH priority shots:")
+       for shot in shots:
+           marker = f" {shot['spectacle_marker']}" if shot['spectacle_marker'] else ""
+           print(f"   • {shot['shot_id']}: {shot['title']}{marker}")
+       print(f"\n💰 Estimated cost: ${min_cost} - ${max_cost} USD")
+       print(f"   Model: {config['default_model']} (${MODEL_COSTS[config['default_model']]}/sec)")
+       
+   except FileNotFoundError as e:
+       print(f"⚠️ Storyboard not found: {e}")
+       return None  # Skip Phase 8
+   except ValueError as e:
+       print(f"⚠️ Configuration error: {e}")
+       return None  # Skip Phase 8
+   ```
+
+2. **Present Approval Gate**
+   
+   Show discovered shots + cost estimate and ASK for approval:
+   
+   ```
+   🎬 Phase 8: Video Animation (Opcional)
+   
+   Encontré {N} shots de ALTA prioridad para animar con Runway Gen-3:
+   
+   {list of shot_ids with titles and markers}
+   
+   💰 Costo estimado: ${min_cost} - ${max_cost} USD
+   Modelo: {model} (${cost_per_sec}/segundo)
+   Duración por video: {duration}s
+   
+   Runway generará videos animados a partir de tus renders estáticos.
+   
+   ¿Querés generar estos videos?
+   
+   Opciones:
+   - "apruebo" / "sí" / "continúa" → Generar todos los videos
+   - "solo 2B,7C" → Generar solo shots específicos (lista separada por comas)
+   - "no" / "omitir" / "skip" → Saltar Phase 8
+   ```
+   
+   **WAIT for user response** — do NOT proceed without explicit approval.
+
+3. **Invoke Runway Script**
+   
+   Based on user response:
+   
+   - **User approves all shots**:
+     ```python
+     import subprocess
+     result = subprocess.run([
+         "python", "scripts/runway_animate.py",
+         "--story", story_slug,
+         "--model", config['default_model']
+     ], capture_output=True, text=True, cwd=project_root)
+     
+     if result.returncode != 0:
+         print(f"❌ Runway script failed:\n{result.stderr}")
+         # Show error but don't halt workflow
+     else:
+         print(result.stdout)
+     ```
+   
+   - **User specifies shot IDs** (e.g., "solo 2B,7C"):
+     Extract shot IDs from response, then:
+     ```python
+     selected_ids = extract_shot_ids_from_response(user_response)  # e.g., ['2B', '7C']
+     
+     result = subprocess.run([
+         "python", "scripts/runway_animate.py",
+         "--story", story_slug,
+         "--shots", ",".join(selected_ids),
+         "--model", config['default_model']
+     ], capture_output=True, text=True, cwd=project_root)
+     ```
+   
+   - **User declines**:
+     ```
+     ✅ Phase 8 omitida por el usuario.
+     ```
+     Save status to Engram and proceed to workflow completion.
+
+4. **Parse Results**
+   
+   After script completes, read `stories/{story-slug}/animations/progress.json`:
+   
+   ```python
+   import json
+   from pathlib import Path
+   
+   progress_path = Path(f"stories/{story_slug}/animations/progress.json")
+   
+   if progress_path.exists():
+       with open(progress_path) as f:
+           progress = json.load(f)
+       
+       results = progress['results']
+       successful = [r for r in results if r['success']]
+       failed = [r for r in results if not r['success']]
+       total_credits = progress['total_credits_used']
+       
+       print(f"\n🏁 Runway Generation Complete")
+       print(f"{'='*60}")
+       print(f"✅ Successful: {len(successful)}/{len(results)} videos")
+       print(f"❌ Failed: {len(failed)}/{len(results)} videos")
+       print(f"💰 Credits used: ${total_credits:.2f}")
+       
+       if successful:
+           print(f"\n✅ Generated videos saved to:")
+           for r in successful:
+               print(f"   • {r['output_path']}")
+       
+       if failed:
+           print(f"\n❌ Failed shots:")
+           for r in failed:
+               print(f"   • {r['shot_id']}: {r['error']}")
+   else:
+       print("⚠️ Progress file not found — check script output for errors")
+   ```
+
+5. **Update README with Animation Status**
+   
+   Append Phase 8 section to existing README.md:
+   
+   ```markdown
+   
+   ---
+   
+   ## Phase 8: Generated Videos (Runway Gen-3)
+   
+   **Status**: {len(successful)}/{len(results)} videos generated  
+   **Model**: {config['default_model']}  
+   **Total Cost**: ${total_credits:.2f} USD  
+   **Date**: {datetime.now().strftime('%Y-%m-%d')}  
+   
+   ### Generated Videos
+   
+   {for each successful result:}
+   - **Shot {shot_id}**: [{title}]({output_path}) — {duration}s, ${credits_used:.2f}
+   
+   {if failed:}
+   ### Failed Shots
+   
+   {for each failed result:}
+   - **Shot {shot_id}**: {error}
+   
+   ### Resume Incomplete Generation
+   
+   If some shots failed, you can resume generation:
+   
+   ```bash
+   python scripts/runway_animate.py --story {story-slug} --resume
+   ```
+   
+   This will skip already-completed shots and retry failed ones.
+   ```
+   
+   Write updated README back to file.
+
+6. **Persist to Engram**
+   
+   Save Phase 8 result to Engram:
+   
+   ```python
+   mcp_engram_mem_save(
+       title=f"Phase 8: Video Animation — {story_title}",
+       content=f"""
+       **What**: Generated {len(successful)}/{len(results)} animated videos using Runway Gen-3
+       **Why**: Transform HIGH priority static renders into animated video clips
+       **Where**: stories/{story_slug}/animations/
+       **Learned**: 
+       - Successful shots: {', '.join([r['shot_id'] for r in successful])}
+       - Failed shots: {', '.join([r['shot_id'] for r in failed]) if failed else 'None'}
+       - Total cost: ${total_credits:.2f}
+       - Model: {config['default_model']}
+       """,
+       type="architecture",
+       topic_key=f"video-gen/{story_slug}/phase-8",
+       project="kogi-kids"
+   )
+   ```
+
+### Error Handling
+
+- **Script exit code 1**: Report error, show logs from stderr, workflow continues (Phase 8 non-blocking)
+- **Budget exceeded**: Show warning with breakdown:
+  ```
+  ⚠️ Estimated cost (${max_cost}) exceeds budget limit (${config['max_budget']}).
+  
+  Opciones:
+  1. Reducir cantidad de shots (especificar IDs con --shots)
+  2. Aumentar RUNWAY_MAX_BUDGET en scripts/.env
+  3. Omitir Phase 8
+  ```
+- **No HIGH priority shots**: Skip Phase 8 automatically with message:
+  ```
+  ℹ️ No HIGH priority shots found in storyboard. Skipping Phase 8.
+  
+  Para agregar shots de alta prioridad, agregá marcadores en storyboard-timing.md:
+  - ⭐ SPECTACLE
+  - 💖 EMOTIONAL CORE
+  - 🦸‍♀️ HERO MOMENT
+  - 💫 MONEY SHOT
+  ```
+- **Missing API key**: Show setup instructions, skip Phase 8
+- **API rate limit**: Script will retry with exponential backoff automatically (handled in runway_animate.py)
+- **Content moderation failure**: Individual shot fails but others proceed (partial success)
+
+### Compact Rules for Phase 8
+
+```
+# Phase 8: Video Animation (video-generator-orchestrator)
+
+1. Check prerequisites: Runway API key in scripts/.env, HIGH priority shots exist, render files exist
+2. Discover HIGH priority shots from storyboard-timing.md (markers: ⭐ SPECTACLE, 💖 EMOTIONAL, 🦸 HERO, 💫 MONEY)
+3. Present approval gate: show shot list + cost estimate, WAIT for user approval
+4. If approved: invoke scripts/runway_animate.py with --story {story-slug} [--shots {ids}]
+5. Parse results from stories/{story-slug}/animations/progress.json
+6. Report: "{successful}/{total} videos, ${credits} used, {failed} failed"
+7. Update README.md with Phase 8 section (generated videos + resume instructions)
+8. Save to Engram: video-gen/{story-slug}/phase-8
+9. Non-blocking: errors in Phase 8 don't halt workflow, user can retry manually
+10. Resume support: --resume flag skips completed shots, retries failed ones
+```
+
+---
+
 ## Final Deliverable
 
-After Phase 6 approved:
+After Phase 7 (and optionally Phase 8) approved:
 
 ```markdown
 # Video Generation Complete — {Story Title}
