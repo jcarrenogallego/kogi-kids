@@ -208,7 +208,14 @@ def discover_shots(story_slug: str, config: Dict) -> List[Dict]:
 
 def load_motion_prompt(story_slug: str, shot_id: str, config: Dict) -> Optional[str]:
     """
-    Load motion prompt for a shot from prompts-es.md (Spanish version preferred).
+    Load motion prompt for a shot from individual .txt files or .md files.
+    
+    Priority order:
+    1. prompts/{shot_id}.txt (English - better for Runway API)
+    2. prompts-es/{shot_id}.txt (Spanish fallback)
+    3. prompts.md with markdown sections (legacy format)
+    4. prompts-es.md with markdown sections (legacy format)
+    5. Generic prompt (last resort)
     
     Args:
         story_slug: Story directory name
@@ -216,20 +223,23 @@ def load_motion_prompt(story_slug: str, shot_id: str, config: Dict) -> Optional[
         config: Configuration dictionary
         
     Returns:
-        Motion prompt string or None if not found
-        
-    Note:
-        Motion prompts should be in format:
-        #### Motion Prompt for Shot <ID>
-        ```
-        <motion prompt text>
-        ```
+        Motion prompt string
     """
     project_root = Path(__file__).parent.parent
+    story_path = project_root / config['stories_path'] / story_slug
     
-    # Try Spanish version first, then English
-    for prompts_file in ['prompts-es.md', 'prompts.md']:
-        prompts_path = project_root / config['stories_path'] / story_slug / 'prompts' / prompts_file
+    # Try individual .txt files first (preferred format)
+    for prompts_dir in ['prompts', 'prompts-es']:
+        prompt_file = story_path / prompts_dir / f'{shot_id}.txt'
+        if prompt_file.exists():
+            with open(prompt_file, 'r', encoding='utf-8') as f:
+                prompt = f.read().strip()
+                if prompt:
+                    return prompt
+    
+    # Fallback to .md files with markdown sections (legacy format)
+    for prompts_file in ['prompts.md', 'prompts-es.md']:
+        prompts_path = story_path / 'prompts' / prompts_file
         
         if not prompts_path.exists():
             continue
