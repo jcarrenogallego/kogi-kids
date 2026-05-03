@@ -19,6 +19,7 @@ import os
 import sys
 import json
 import time
+import base64
 import argparse
 import re
 from pathlib import Path
@@ -328,9 +329,16 @@ def generate_video_real(shot: Dict, config: Dict, motion_prompt: str) -> Dict:
     client = RunwayML(api_key=config['api_key'])
     
     try:
-        # Read image as base64
+        # Read image and encode as Data URI
         with open(image_path, 'rb') as f:
-            image_data = f.read()
+            image_bytes = f.read()
+        
+        # Determine MIME type from file extension
+        mime_type = 'image/png' if image_path.suffix.lower() == '.png' else 'image/jpeg'
+        
+        # Create Data URI with base64 encoding
+        base64_image = base64.b64encode(image_bytes).decode('utf-8')
+        data_uri = f"data:{mime_type};base64,{base64_image}"
         
         # Create generation task
         start_time = time.time()
@@ -338,10 +346,10 @@ def generate_video_real(shot: Dict, config: Dict, motion_prompt: str) -> Dict:
         # API call to generate video
         task = client.image_to_video.create(
             model=config['default_model'],
-            prompt_image=image_data,
+            prompt_image=data_uri,
             prompt_text=motion_prompt,
             duration=shot['duration'],
-            ratio="16:9"
+            ratio="1280:720"  # 16:9 aspect ratio
         )
         
         # Poll for completion
