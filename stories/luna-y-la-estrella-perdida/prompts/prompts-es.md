@@ -515,18 +515,18 @@
 
 ### Prompt 8C - POV Sky Resolution Mirror 1C
 
-**Propósito**: Final resolution showing Estrellita home and happy  
+**Propósito**: Final resolution showing Luna watching Estrellita home and happy  
 **Referencia de Plano**: Scene 8, Shot 8C  
-**Duración**: 11 segundos  
-**Imagen a Subir**: ninguna (plano solo de entorno)  
+**Duración**: 11 seconds  
+**Imagen a Subir**: `moodboard/luna.png`  
 
 **Copiá este prompt (pegalo en Web UI - texto en INGLÉS):**
 
 ```
-/imagine disney 3d pixar animation style point of view shot looking up at night sky through bedroom window, vast starry night sky with thousands of stars scattered across deep midnight blue background, milky way faintly visible, white wooden window frame visible in foreground creating natural border, subtle hand shadow on frame edge suggesting girl watching, one particularly bright golden star positioned in upper right area standing out clearly brighter than all other stars, special star pulses gently with distinctive three pulse rhythm communicating across distance, constellation pattern visible around bright star showing sisterhood, star firmly in place restored and home showing happy ending, sky rendered in smooth stylized disney animation NOT photorealistic NOT cinematic, simplified star field with one distinctly brighter star as focal point, soft color gradients from deep blue to subtle purple, peaceful resolution atmosphere showing what was lost is now found, magical connection maintained across distance, disney feature film animation style, smooth cartoon sky rendering, stylized star patterns, warm peaceful ending mood, professional disney pixar quality --ar 16:9 --v 7 --sref 1234567890 --sw 200
+/imagine disney 3d pixar animation style medium shot from behind and slight side angle, 7 year old latina girl character with wavy dark brown hair with two small star clips standing at bedroom window at night looking up at starry sky, wearing blue pajama top with yellow star pattern and blue pajama pants, golden chain necklace with small star pendant visible, white bunny slippers on feet, girl positioned left side of frame in profile or three quarter back view with her upper body and head visible, right hand resting gently on white wooden window frame, gazing upward through window at night sky, vast starry night sky visible through window with thousands of stars scattered across deep midnight blue background, milky way faintly visible, one particularly bright golden star positioned in upper right area of sky standing out clearly brighter than all other stars, special star pulses gently with distinctive three pulse rhythm communicating across distance showing magical connection, constellation pattern visible around bright star, white wooden window frame creating natural border, soft moonlight from window illuminating girl's profile and pajamas with cool blue glow, warm golden bedside lamp glow from behind mixing with cool moonlight, peaceful wise expression on girl's face showing recognition and connection with special star, background bedroom softly blurred, sky rendered in smooth stylized disney animation NOT photorealistic NOT cinematic, simplified star field with one distinctly brighter star as focal point, soft color gradients from deep blue to subtle purple, peaceful resolution atmosphere showing what was lost is now found, magical connection maintained across distance, disney feature film animation style, smooth cartoon rendering, big head cartoon proportions, exaggerated large disney eyes, stylized features NOT realistic, warm peaceful ending mood, professional disney pixar quality --ar 16:9 --v 7 --sref 1234567890 --sw 200
 ```
 
-**Notas Técnicas**: MIRRORS Shot 1C but RESOLVES the narrative. Same location (upper-right third) but now Estrellita is home, bright, secure. Distinctive pulse pattern shows communication. Visual resolution creating satisfaction.  
+**Notas Técnicas**: CHANGED from POV to profile/back shot to show Luna with complete costume. Luna positioned left frame in three-quarter back or profile view. Window right side showing sky. One bright star (Estrellita) in upper right area pulsing with three-pulse rhythm. Visual connection between Luna and her friend maintained across distance. MIRRORS emotional resolution of Shot 1C but shows Luna watching. Blue pajamas with yellow stars, star clips, golden necklace ALL visible.
 **Guardar Como**: `renders/8c-sky-resolution.png`
 
 ---
