@@ -1,0 +1,48 @@
+{
+  "voices": [
+    {
+      "character": "narrator",
+      "voice_id": "HMMu0XoIm7ib2e6V02E3",
+      "description": "Alonso - Professional Mexican Spanish narrator (native pronunciation)",
+      "stability": 0.75,
+      "similarity_boost": 0.85,
+      "style": 0.2,
+      "use_speaker_boost": true
+    },
+    {
+      "character": "Luna",
+      "voice_id": "C1cKsB5KZglIOozCoRBY",
+      "description": "Luna - Spanish child voice",
+      "stability": 0.75,
+      "similarity_boost": 0.85,
+      "style": 0.2,
+      "use_speaker_boost": true
+    },
+    {
+      "character": "Estrellita",
+      "voice_id": "ajOR9IDAaubDK5qtLUqQ",
+      "description": "Estrellita - Magical, ethereal voice",
+      "stability": 0.75,
+      "similarity_boost": 0.85,
+      "style": 0.3,
+      "use_speaker_boost": true
+    },
+    {
+      "character": "Viento",
+      "voice_id": "WwBoE3ZND2tj8noa9Obu",
+      "description": "Viento - Gentle, wise voice",
+      "stability": 0.75,
+      "similarity_boost": 0.85,
+      "style": 0.15,
+      "use_speaker_boost": true
+    }
+  ],
+  "notes": [
+    "Voice IDs are from ElevenLabs pre-made voices library",
+    "Get your own voice IDs from: https://elevenlabs.io/app/voice-library",
+    "Stability: Lower = more varied, Higher = more consistent",
+    "Similarity Boost: Higher = closer to original voice",
+    "Style: Higher = more expressive/dramatic",
+    "Use Speaker Boost: Enhances clarity and presence"
+  ]
+}

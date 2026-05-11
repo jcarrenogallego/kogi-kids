@@ -4,6 +4,12 @@ runwayml>=4.0.0
 python-dotenv>=1.0.0
 requests>=2.31.0
 
+# Audio generation dependencies
+aiohttp>=3.9.0  # Async HTTP for ElevenLabs API
+pydantic>=2.5.0  # Data validation for schemas
+elevenlabs>=1.0.0  # ElevenLabs Python SDK
+tqdm>=4.66.0  # Progress bars for batch operations
+
 # Testing dependencies (dev)
 pytest==7.4.3
 pytest-mock==3.12.0

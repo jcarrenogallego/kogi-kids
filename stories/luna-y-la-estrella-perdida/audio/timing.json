@@ -1,0 +1,376 @@
+{
+  "story": "luna-y-la-estrella-perdida",
+  "total_duration": 189.0,
+  "total_scenes": 8,
+  "total_shots": 26,
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "B",
+      "total_duration": 23.0,
+      "shots": [
+        {
+          "shot_id": "1A",
+          "description": "B",
+          "duration": 6.0,
+          "start_time": 0.0,
+          "end_time": 6.0,
+          "narrative": "Luna era una niña curiosa de siete años. Cada noche, antes de dormir, miraba las estrellas desde su ventana y les contaba sus secretos.",
+          "character": "narrator",
+          "dialogue": "Luna era una niña curiosa de siete años. Cada noche, antes de dormir, miraba las estrellas desde su ventana y les contaba sus secretos.",
+          "has_dialogue": true,
+          "render_file": "renders/1a-bedroom-establishing.png"
+        },
+        {
+          "shot_id": "1B",
+          "description": "L",
+          "duration": 5.0,
+          "start_time": 6.0,
+          "end_time": 11.0,
+          "narrative": "Una noche, mientras observaba el cielo, notó algo extraño...",
+          "character": "narrator",
+          "dialogue": "Una noche, mientras observaba el cielo, notó algo extraño...",
+          "has_dialogue": true,
+          "render_file": "renders/1b-luna-closeup-wonder.png"
+        },
+        {
+          "shot_id": "1C",
+          "description": "P",
+          "duration": 12.0,
+          "start_time": 11.0,
+          "end_time": 23.0,
+          "narrative": "Una estrella pequeña y brillante estaba cayendo del cielo.",
+          "character": "narrator",
+          "dialogue": "Una estrella pequeña y brillante estaba cayendo del cielo.",
+          "has_dialogue": true,
+          "render_file": "renders/1c-pov-starry-sky.png"
+        }
+      ]
+    },
+    {
+      "scene_number": 2,
+      "title": "G",
+      "total_duration": 31.0,
+      "shots": [
+        {
+          "shot_id": "2A",
+          "description": "G",
+          "duration": 5.0,
+          "start_time": 23.0,
+          "end_time": 28.0,
+          "narrative": "La estrella descendió lentamente...",
+          "character": "narrator",
+          "dialogue": "La estrella descendió lentamente...",
+          "has_dialogue": true,
+          "render_file": "renders/2a-garden-establishing.png"
+        },
+        {
+          "shot_id": "2B",
+          "description": "S",
+          "duration": 8.0,
+          "start_time": 28.0,
+          "end_time": 36.0,
+          "narrative": "...y aterrizó en el jardín de Luna con un suave resplandor dorado.",
+          "character": "narrator",
+          "dialogue": "...y aterrizó en el jardín de Luna con un suave resplandor dorado.",
+          "has_dialogue": true,
+          "render_file": "renders/2b-star-descent.png"
+        },
+        {
+          "shot_id": "2D",
+          "description": "S",
+          "duration": 6.0,
+          "start_time": 36.0,
+          "end_time": 42.0,
+          "narrative": "(Sin narración - momento visual)",
+          "character": "narrator",
+          "dialogue": "",
+          "has_dialogue": false,
+          "render_file": "renders/2d-star-impact.png"
+        },
+        {
+          "shot_id": "2E",
+          "description": "L",
+          "duration": 12.0,
+          "start_time": 42.0,
+          "end_time": 54.0,
+          "narrative": "Luna corrió afuera en pijama y pantuflas. Allí, entre las flores, encontró a una estrellita del tamaño de su mano, parpadeando débilmente.",
+          "character": "narrator",
+          "dialogue": "Luna corrió afuera en pijama y pantuflas. Allí, entre las flores, encontró a una estrellita del tamaño de su mano, parpadeando débilmente.",
+          "has_dialogue": true,
+          "render_file": "renders/2e-luna-estrellita-meet.png"
+        }
+      ]
+    },
+    {
+      "scene_number": 3,
+      "title": "G",
+      "total_duration": 21.0,
+      "shots": [
+        {
+          "shot_id": "3A",
+          "description": "L",
+          "duration": 5.0,
+          "start_time": 54.0,
+          "end_time": 59.0,
+          "narrative": "",
+          "character": "narrator",
+          "dialogue": "",
+          "has_dialogue": false,
+          "render_file": "renders/3a-luna-closeup-face.png"
+        },
+        {
+          "shot_id": "3B",
+          "description": "E",
+          "duration": 4.0,
+          "start_time": 59.0,
+          "end_time": 63.0,
+          "narrative": "",
+          "character": "narrator",
+          "dialogue": "",
+          "has_dialogue": false,
+          "render_file": "renders/3b-estrellita-closeup.png"
+        },
+        {
+          "shot_id": "3C",
+          "description": "L",
+          "duration": 12.0,
+          "start_time": 63.0,
+          "end_time": 75.0,
+          "narrative": "",
+          "character": "narrator",
+          "dialogue": "",
+          "has_dialogue": false,
+          "render_file": "renders/3c-luna-estrellita-bond.png"
+        }
+      ]
+    },
+    {
+      "scene_number": 4,
+      "title": "F",
+      "total_duration": 13.0,
+      "shots": [
+        {
+          "shot_id": "4A",
+          "description": "F",
+          "duration": 7.0,
+          "start_time": 75.0,
+          "end_time": 82.0,
+          "narrative": "Pero había un problema: la colina más alta estaba muy lejos, y el camino atravesaba el bosque oscuro que siempre le había dado un poco de miedo.",
+          "character": "narrator",
+          "dialogue": "Pero había un problema: la colina más alta estaba muy lejos, y el camino atravesaba el bosque oscuro que siempre le había dado un poco de miedo.",
+          "has_dialogue": true,
+          "render_file": "renders/4a-forest-edge.png"
+        },
+        {
+          "shot_id": "4C",
+          "description": "L",
+          "duration": 6.0,
+          "start_time": 82.0,
+          "end_time": 88.0,
+          "narrative": "Luna respiró profundo. Su nueva amiga la necesitaba. Tomó su linterna, colocó a la estrellita en una pequeña cesta, y comenzó su aventura.",
+          "character": "narrator",
+          "dialogue": "Luna respiró profundo. Su nueva amiga la necesitaba. Tomó su linterna, colocó a la estrellita en una pequeña cesta, y comenzó su aventura.",
+          "has_dialogue": true,
+          "render_file": "renders/4c-luna-hero-entering.png"
+        }
+      ]
+    },
+    {
+      "scene_number": 5,
+      "title": "D",
+      "total_duration": 18.0,
+      "shots": [
+        {
+          "shot_id": "5A",
+          "description": "A",
+          "duration": 8.0,
+          "start_time": 88.0,
+          "end_time": 96.0,
+          "narrative": "En el bosque, conoció a un búho sabio llamado Oliver...",
+          "character": "narrator",
+          "dialogue": "En el bosque, conoció a un búho sabio llamado Oliver...",
+          "has_dialogue": true,
+          "render_file": "renders/5a-ancient-oak.png"
+        },
+        {
+          "shot_id": "5B",
+          "description": "O",
+          "duration": 6.0,
+          "start_time": 96.0,
+          "end_time": 102.0,
+          "narrative": "",
+          "character": "narrator",
+          "dialogue": "",
+          "has_dialogue": false,
+          "render_file": "renders/5b-oliver-closeup.png"
+        },
+        {
+          "shot_id": "5E",
+          "description": "L",
+          "duration": 4.0,
+          "start_time": 102.0,
+          "end_time": 106.0,
+          "narrative": "...que le mostró el camino más seguro.",
+          "character": "narrator",
+          "dialogue": "...que le mostró el camino más seguro.",
+          "has_dialogue": true,
+          "render_file": "renders/5e-luna-oliver-departure.png"
+        }
+      ]
+    },
+    {
+      "scene_number": 6,
+      "title": "D",
+      "total_duration": 19.0,
+      "shots": [
+        {
+          "shot_id": "6C",
+          "description": "L",
+          "duration": 5.0,
+          "start_time": 106.0,
+          "end_time": 111.0,
+          "narrative": "Cuando su linterna se quedó sin pilas, el bosque se volvió muy oscuro.",
+          "character": "narrator",
+          "dialogue": "Cuando su linterna se quedó sin pilas, el bosque se volvió muy oscuro.",
+          "has_dialogue": true,
+          "render_file": "renders/6c-luna-darkness.png"
+        },
+        {
+          "shot_id": "6D",
+          "description": "F",
+          "duration": 9.0,
+          "start_time": 111.0,
+          "end_time": 120.0,
+          "narrative": "Pero entonces, una familia de luciérnagas apareció e iluminó el sendero.",
+          "character": "narrator",
+          "dialogue": "Pero entonces, una familia de luciérnagas apareció e iluminó el sendero.",
+          "has_dialogue": true,
+          "render_file": "renders/6d-firefly-transformation.png"
+        },
+        {
+          "shot_id": "6E",
+          "description": "L",
+          "duration": 5.0,
+          "start_time": 120.0,
+          "end_time": 125.0,
+          "narrative": "(Sin narración - momento de maravilla)",
+          "character": "narrator",
+          "dialogue": "",
+          "has_dialogue": false,
+          "render_file": "renders/6e-luna-fireflies.png"
+        }
+      ]
+    },
+    {
+      "scene_number": 7,
+      "title": "H",
+      "total_duration": 35.0,
+      "shots": [
+        {
+          "shot_id": "7A",
+          "description": "H",
+          "duration": 7.0,
+          "start_time": 125.0,
+          "end_time": 132.0,
+          "narrative": "Finalmente, llegaron a la cima de la colina justo cuando el amanecer estaba por comenzar.",
+          "character": "narrator",
+          "dialogue": "Finalmente, llegaron a la cima de la colina justo cuando el amanecer estaba por comenzar.",
+          "has_dialogue": true,
+          "render_file": "renders/7a-hilltop-panorama.png"
+        },
+        {
+          "shot_id": "7B",
+          "description": "L",
+          "duration": 6.0,
+          "start_time": 132.0,
+          "end_time": 138.0,
+          "narrative": "Luna levantó la cesta hacia el cielo.",
+          "character": "narrator",
+          "dialogue": "Luna levantó la cesta hacia el cielo.",
+          "has_dialogue": true,
+          "render_file": "renders/7b-luna-summit.png"
+        },
+        {
+          "shot_id": "7C",
+          "description": "E",
+          "duration": 12.0,
+          "start_time": 138.0,
+          "end_time": 150.0,
+          "narrative": "",
+          "character": "narrator",
+          "dialogue": "",
+          "has_dialogue": false,
+          "render_file": "renders/7c-star-ascent.png"
+        },
+        {
+          "shot_id": "7D",
+          "description": "C",
+          "duration": 5.0,
+          "start_time": 150.0,
+          "end_time": 155.0,
+          "narrative": "La estrellita volvió a su lugar en el cielo, reuniéndose con sus hermanas en la constelación.",
+          "character": "narrator",
+          "dialogue": "La estrellita volvió a su lugar en el cielo, reuniéndose con sus hermanas en la constelación.",
+          "has_dialogue": true,
+          "render_file": "renders/7d-constellation-reunion.png"
+        },
+        {
+          "shot_id": "7E",
+          "description": "L",
+          "duration": 5.0,
+          "start_time": 155.0,
+          "end_time": 160.0,
+          "narrative": "(Sin narración - momento puro de emoción)",
+          "character": "narrator",
+          "dialogue": "",
+          "has_dialogue": false,
+          "render_file": "renders/7e-luna-tears.png"
+        }
+      ]
+    },
+    {
+      "scene_number": 8,
+      "title": "L",
+      "total_duration": 29.0,
+      "shots": [
+        {
+          "shot_id": "8A",
+          "description": "B",
+          "duration": 8.0,
+          "start_time": 160.0,
+          "end_time": 168.0,
+          "narrative": "Y desde esa noche, Luna notó que una estrella en particular siempre brillaba un poco más fuerte cuando ella la miraba desde su ventana.",
+          "character": "narrator",
+          "dialogue": "Y desde esa noche, Luna notó que una estrella en particular siempre brillaba un poco más fuerte cuando ella la miraba desde su ventana.",
+          "has_dialogue": true,
+          "render_file": "renders/8a-bedroom-return.png"
+        },
+        {
+          "shot_id": "8B",
+          "description": "L",
+          "duration": 10.0,
+          "start_time": 168.0,
+          "end_time": 178.0,
+          "narrative": "Luna había descubierto que ser valiente no significa no tener miedo, sino hacer lo correcto incluso cuando tienes miedo.",
+          "character": "narrator",
+          "dialogue": "Luna había descubierto que ser valiente no significa no tener miedo, sino hacer lo correcto incluso cuando tienes miedo.",
+          "has_dialogue": true,
+          "render_file": "renders/8b-luna-wiser.png"
+        },
+        {
+          "shot_id": "8C",
+          "description": "S",
+          "duration": 11.0,
+          "start_time": 178.0,
+          "end_time": 189.0,
+          "narrative": "Y que ayudar a un amigo es la aventura más importante de todas.",
+          "character": "narrator",
+          "dialogue": "Y que ayudar a un amigo es la aventura más importante de todas.",
+          "has_dialogue": true,
+          "render_file": "renders/8c-sky-resolution.png"
+        }
+      ]
+    }
+  ]
+}
