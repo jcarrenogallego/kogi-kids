@@ -290,12 +290,14 @@ class FFmpegMixer:
         # Build filter chain
         filter_parts = []
 
-        # Process each voice with delay and volume
+        # Process each voice with trim (to expected duration), delay and volume
         for i, segment in enumerate(voice_segments, start=1):
             delay_ms = int(segment.start_time * 1000)
+            duration_sec = segment.duration
             volume_db = self.config.voice_level
+            # Trim audio to expected duration, then delay to start position
             filter_parts.append(
-                f"[{i}]adelay={delay_ms}|{delay_ms},volume={volume_db}dB[v{i - 1}]"
+                f"[{i}]atrim=0:{duration_sec},adelay={delay_ms}|{delay_ms},volume={volume_db}dB[v{i - 1}]"
             )
 
         # Mix all streams
